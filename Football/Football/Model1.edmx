@@ -4,15 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SBDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Club">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="64" Nullable="false" />
-          <Property Name="stadiumID" Type="int" Nullable="false" />
-          <Property Name="trainingStaffID" Type="int" Nullable="false" />
+          <Property Name="stadiumID" Type="int" />
           <Property Name="recordID" Type="int" />
         </EntityType>
         <EntityType Name="Match">
@@ -37,7 +36,7 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="firstName" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="lastName" Type="varchar" MaxLength="64" Nullable="false" />
-          <Property Name="clubID" Type="int" Nullable="false" />
+          <Property Name="clubID" Type="int" />
           <Property Name="recordID" Type="int" />
         </EntityType>
         <EntityType Name="Record">
@@ -56,6 +55,8 @@
           <Property Name="firstName" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="lastName" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="recordID" Type="int" />
+          <Property Name="salary" Type="float" Nullable="false" />
+          <Property Name="isBusy" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Stadium">
           <Key>
@@ -73,6 +74,7 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="matchID" Type="int" Nullable="false" />
           <Property Name="PESEL" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Timetable">
           <Key>
@@ -91,7 +93,7 @@
           <Property Name="lastName" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="age" Type="int" Nullable="false" />
           <Property Name="duty" Type="varchar" MaxLength="64" Nullable="false" />
-          <Property Name="clubID" Type="int" Nullable="false" />
+          <Property Name="clubID" Type="int" />
           <Property Name="recordID" Type="int" />
         </EntityType>
         <EntityType Name="Winners">
@@ -107,7 +109,7 @@
           <Property Name="goalsLost" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="Club_fk0">
-          <End Role="Stadium" Type="Self.Stadium" Multiplicity="1" />
+          <End Role="Stadium" Type="Self.Stadium" Multiplicity="0..1" />
           <End Role="Club" Type="Self.Club" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stadium">
@@ -119,18 +121,6 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Club_fk1">
-          <End Role="TrainingStaff" Type="Self.TrainingStaff" Multiplicity="1" />
-          <End Role="Club" Type="Self.Club" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TrainingStaff">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Club">
-              <PropertyRef Name="trainingStaffID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Club_fk2">
           <End Role="Record" Type="Self.Record" Multiplicity="0..1" />
           <End Role="Club" Type="Self.Club" Multiplicity="*" />
           <ReferentialConstraint>
@@ -227,7 +217,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Player_fk0">
-          <End Role="Club" Type="Self.Club" Multiplicity="1" />
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Club">
@@ -299,7 +289,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="TrainingStaff_fk0">
-          <End Role="Club" Type="Self.Club" Multiplicity="1" />
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
           <End Role="TrainingStaff" Type="Self.TrainingStaff" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Club">
@@ -334,7 +324,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SBDModelStoreContainer">
+        <EntityContainer Name="dbModelStoreContainer">
           <EntitySet Name="Club" EntityType="Self.Club" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Match" EntityType="Self.Match" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
@@ -350,10 +340,6 @@
             <End Role="Club" EntitySet="Club" />
           </AssociationSet>
           <AssociationSet Name="Club_fk1" Association="Self.Club_fk1">
-            <End Role="TrainingStaff" EntitySet="TrainingStaff" />
-            <End Role="Club" EntitySet="Club" />
-          </AssociationSet>
-          <AssociationSet Name="Club_fk2" Association="Self.Club_fk2">
             <End Role="Record" EntitySet="Record" />
             <End Role="Club" EntitySet="Club" />
           </AssociationSet>
@@ -426,23 +412,21 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="SBDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Club">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="stadiumID" Type="Int32" Nullable="false" />
-          <Property Name="trainingStaffID" Type="Int32" Nullable="false" />
+          <Property Name="stadiumID" Type="Int32" />
           <Property Name="recordID" Type="Int32" />
           <NavigationProperty Name="Stadium" Relationship="Self.Club_fk0" FromRole="Club" ToRole="Stadium" />
-          <NavigationProperty Name="TrainingStaff" Relationship="Self.Club_fk1" FromRole="Club" ToRole="TrainingStaff" />
-          <NavigationProperty Name="Record" Relationship="Self.Club_fk2" FromRole="Club" ToRole="Record" />
-          <NavigationProperty Name="Match" Relationship="Self.Match_fk1" FromRole="Club" ToRole="Match" />
-          <NavigationProperty Name="Match1" Relationship="Self.Match_fk2" FromRole="Club" ToRole="Match" />
-          <NavigationProperty Name="Player" Relationship="Self.Player_fk0" FromRole="Club" ToRole="Player" />
-          <NavigationProperty Name="TrainingStaff1" Relationship="Self.TrainingStaff_fk0" FromRole="Club" ToRole="TrainingStaff" />
+          <NavigationProperty Name="Record" Relationship="Self.Club_fk1" FromRole="Club" ToRole="Record" />
+          <NavigationProperty Name="Matches" Relationship="Self.Match_fk1" FromRole="Club" ToRole="Match" />
+          <NavigationProperty Name="Matches1" Relationship="Self.Match_fk2" FromRole="Club" ToRole="Match" />
+          <NavigationProperty Name="Players" Relationship="Self.Player_fk0" FromRole="Club" ToRole="Player" />
+          <NavigationProperty Name="TrainingStaffs" Relationship="Self.TrainingStaff_fk0" FromRole="Club" ToRole="TrainingStaff" />
           <NavigationProperty Name="Winners" Relationship="Self.Winners_fk0" FromRole="Club" ToRole="Winners" />
         </EntityType>
         <EntityType Name="Match">
@@ -466,8 +450,8 @@
           <NavigationProperty Name="Referee1" Relationship="Self.Match_fk4" FromRole="Match" ToRole="Referee" />
           <NavigationProperty Name="Referee2" Relationship="Self.Match_fk5" FromRole="Match" ToRole="Referee" />
           <NavigationProperty Name="Referee3" Relationship="Self.Match_fk6" FromRole="Match" ToRole="Referee" />
-          <NavigationProperty Name="Ticket" Relationship="Self.Ticket_fk0" FromRole="Match" ToRole="Ticket" />
-          <NavigationProperty Name="Timetable" Relationship="Self.Timetable_fk0" FromRole="Match" ToRole="Timetable" />
+          <NavigationProperty Name="Tickets" Relationship="Self.Ticket_fk0" FromRole="Match" ToRole="Ticket" />
+          <NavigationProperty Name="Timetables" Relationship="Self.Timetable_fk0" FromRole="Match" ToRole="Timetable" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
@@ -476,7 +460,7 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="firstName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lastName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="clubID" Type="Int32" Nullable="false" />
+          <Property Name="clubID" Type="Int32" />
           <Property Name="recordID" Type="Int32" />
           <NavigationProperty Name="Club" Relationship="Self.Player_fk0" FromRole="Player" ToRole="Club" />
           <NavigationProperty Name="Record" Relationship="Self.Player_fk1" FromRole="Player" ToRole="Record" />
@@ -488,10 +472,10 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Club" Relationship="Self.Club_fk2" FromRole="Record" ToRole="Club" />
-          <NavigationProperty Name="Player" Relationship="Self.Player_fk1" FromRole="Record" ToRole="Player" />
-          <NavigationProperty Name="Referee" Relationship="Self.Referee_fk0" FromRole="Record" ToRole="Referee" />
-          <NavigationProperty Name="TrainingStaff" Relationship="Self.TrainingStaff_fk1" FromRole="Record" ToRole="TrainingStaff" />
+          <NavigationProperty Name="Clubs" Relationship="Self.Club_fk1" FromRole="Record" ToRole="Club" />
+          <NavigationProperty Name="Players" Relationship="Self.Player_fk1" FromRole="Record" ToRole="Player" />
+          <NavigationProperty Name="Referees" Relationship="Self.Referee_fk0" FromRole="Record" ToRole="Referee" />
+          <NavigationProperty Name="TrainingStaffs" Relationship="Self.TrainingStaff_fk1" FromRole="Record" ToRole="TrainingStaff" />
         </EntityType>
         <EntityType Name="Referee">
           <Key>
@@ -501,12 +485,14 @@
           <Property Name="firstName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lastName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="recordID" Type="Int32" />
-          <NavigationProperty Name="Match" Relationship="Self.Match_fk3" FromRole="Referee" ToRole="Match" />
-          <NavigationProperty Name="Match1" Relationship="Self.Match_fk4" FromRole="Referee" ToRole="Match" />
-          <NavigationProperty Name="Match2" Relationship="Self.Match_fk5" FromRole="Referee" ToRole="Match" />
-          <NavigationProperty Name="Match3" Relationship="Self.Match_fk6" FromRole="Referee" ToRole="Match" />
+          <Property Name="salary" Type="Double" Nullable="false" />
+          <Property Name="isBusy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Matches" Relationship="Self.Match_fk3" FromRole="Referee" ToRole="Match" />
+          <NavigationProperty Name="Matches1" Relationship="Self.Match_fk4" FromRole="Referee" ToRole="Match" />
+          <NavigationProperty Name="Matches2" Relationship="Self.Match_fk5" FromRole="Referee" ToRole="Match" />
+          <NavigationProperty Name="Matches3" Relationship="Self.Match_fk6" FromRole="Referee" ToRole="Match" />
           <NavigationProperty Name="Record" Relationship="Self.Referee_fk0" FromRole="Referee" ToRole="Record" />
-          <NavigationProperty Name="Timetable" Relationship="Self.Timetable_fk1" FromRole="Referee" ToRole="Timetable" />
+          <NavigationProperty Name="Timetables" Relationship="Self.Timetable_fk1" FromRole="Referee" ToRole="Timetable" />
         </EntityType>
         <EntityType Name="Stadium">
           <Key>
@@ -516,8 +502,8 @@
           <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="city" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="country" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Club" Relationship="Self.Club_fk0" FromRole="Stadium" ToRole="Club" />
-          <NavigationProperty Name="Match" Relationship="Self.Match_fk0" FromRole="Stadium" ToRole="Match" />
+          <NavigationProperty Name="Clubs" Relationship="Self.Club_fk0" FromRole="Stadium" ToRole="Club" />
+          <NavigationProperty Name="Matches" Relationship="Self.Match_fk0" FromRole="Stadium" ToRole="Match" />
         </EntityType>
         <EntityType Name="Ticket">
           <Key>
@@ -526,6 +512,7 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="matchID" Type="Int32" Nullable="false" />
           <Property Name="PESEL" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Match" Relationship="Self.Ticket_fk0" FromRole="Ticket" ToRole="Match" />
         </EntityType>
         <EntityType Name="Timetable">
@@ -547,13 +534,12 @@
           <Property Name="lastName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="age" Type="Int32" Nullable="false" />
           <Property Name="duty" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="clubID" Type="Int32" Nullable="false" />
+          <Property Name="clubID" Type="Int32" />
           <Property Name="recordID" Type="Int32" />
-          <NavigationProperty Name="Club" Relationship="Self.Club_fk1" FromRole="TrainingStaff" ToRole="Club" />
-          <NavigationProperty Name="Club1" Relationship="Self.TrainingStaff_fk0" FromRole="TrainingStaff" ToRole="Club" />
+          <NavigationProperty Name="Club" Relationship="Self.TrainingStaff_fk0" FromRole="TrainingStaff" ToRole="Club" />
           <NavigationProperty Name="Record" Relationship="Self.TrainingStaff_fk1" FromRole="TrainingStaff" ToRole="Record" />
         </EntityType>
-        <EntityType Name="Winners">
+        <EntityType Name="Winner">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -567,7 +553,7 @@
           <NavigationProperty Name="Club" Relationship="Self.Winners_fk0" FromRole="Winners" ToRole="Club" />
         </EntityType>
         <Association Name="Club_fk0">
-          <End Role="Stadium" Type="Self.Stadium" Multiplicity="1" />
+          <End Role="Stadium" Type="Self.Stadium" Multiplicity="0..1" />
           <End Role="Club" Type="Self.Club" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Stadium">
@@ -579,18 +565,6 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Club_fk1">
-          <End Role="TrainingStaff" Type="Self.TrainingStaff" Multiplicity="1" />
-          <End Role="Club" Type="Self.Club" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TrainingStaff">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Club">
-              <PropertyRef Name="trainingStaffID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Club_fk2">
           <End Role="Record" Type="Self.Record" Multiplicity="0..1" />
           <End Role="Club" Type="Self.Club" Multiplicity="*" />
           <ReferentialConstraint>
@@ -627,7 +601,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="Player_fk0">
-          <End Role="Club" Type="Self.Club" Multiplicity="1" />
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Club">
@@ -639,7 +613,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="TrainingStaff_fk0">
-          <End Role="Club" Type="Self.Club" Multiplicity="1" />
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
           <End Role="TrainingStaff" Type="Self.TrainingStaff" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Club">
@@ -652,7 +626,7 @@
         </Association>
         <Association Name="Winners_fk0">
           <End Role="Club" Type="Self.Club" Multiplicity="1" />
-          <End Role="Winners" Type="Self.Winners" Multiplicity="*" />
+          <End Role="Winners" Type="Self.Winner" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Club">
               <PropertyRef Name="id" />
@@ -794,92 +768,88 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SBDEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Club" EntityType="Self.Club" />
-          <EntitySet Name="Match" EntityType="Self.Match" />
-          <EntitySet Name="Player" EntityType="Self.Player" />
-          <EntitySet Name="Record" EntityType="Self.Record" />
-          <EntitySet Name="Referee" EntityType="Self.Referee" />
-          <EntitySet Name="Stadium" EntityType="Self.Stadium" />
-          <EntitySet Name="Ticket" EntityType="Self.Ticket" />
-          <EntitySet Name="Timetable" EntityType="Self.Timetable" />
-          <EntitySet Name="TrainingStaff" EntityType="Self.TrainingStaff" />
-          <EntitySet Name="Winners" EntityType="Self.Winners" />
+        <EntityContainer Name="dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clubs" EntityType="Self.Club" />
+          <EntitySet Name="Matches" EntityType="Self.Match" />
+          <EntitySet Name="Players" EntityType="Self.Player" />
+          <EntitySet Name="Records" EntityType="Self.Record" />
+          <EntitySet Name="Referees" EntityType="Self.Referee" />
+          <EntitySet Name="Stadia" EntityType="Self.Stadium" />
+          <EntitySet Name="Tickets" EntityType="Self.Ticket" />
+          <EntitySet Name="Timetables" EntityType="Self.Timetable" />
+          <EntitySet Name="TrainingStaffs" EntityType="Self.TrainingStaff" />
+          <EntitySet Name="Winners" EntityType="Self.Winner" />
           <AssociationSet Name="Club_fk0" Association="Self.Club_fk0">
-            <End Role="Stadium" EntitySet="Stadium" />
-            <End Role="Club" EntitySet="Club" />
+            <End Role="Stadium" EntitySet="Stadia" />
+            <End Role="Club" EntitySet="Clubs" />
           </AssociationSet>
           <AssociationSet Name="Club_fk1" Association="Self.Club_fk1">
-            <End Role="TrainingStaff" EntitySet="TrainingStaff" />
-            <End Role="Club" EntitySet="Club" />
-          </AssociationSet>
-          <AssociationSet Name="Club_fk2" Association="Self.Club_fk2">
-            <End Role="Record" EntitySet="Record" />
-            <End Role="Club" EntitySet="Club" />
+            <End Role="Record" EntitySet="Records" />
+            <End Role="Club" EntitySet="Clubs" />
           </AssociationSet>
           <AssociationSet Name="Match_fk1" Association="Self.Match_fk1">
-            <End Role="Club" EntitySet="Club" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Club" EntitySet="Clubs" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Match_fk2" Association="Self.Match_fk2">
-            <End Role="Club" EntitySet="Club" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Club" EntitySet="Clubs" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Player_fk0" Association="Self.Player_fk0">
-            <End Role="Club" EntitySet="Club" />
-            <End Role="Player" EntitySet="Player" />
+            <End Role="Club" EntitySet="Clubs" />
+            <End Role="Player" EntitySet="Players" />
           </AssociationSet>
           <AssociationSet Name="TrainingStaff_fk0" Association="Self.TrainingStaff_fk0">
-            <End Role="Club" EntitySet="Club" />
-            <End Role="TrainingStaff" EntitySet="TrainingStaff" />
+            <End Role="Club" EntitySet="Clubs" />
+            <End Role="TrainingStaff" EntitySet="TrainingStaffs" />
           </AssociationSet>
           <AssociationSet Name="Winners_fk0" Association="Self.Winners_fk0">
-            <End Role="Club" EntitySet="Club" />
+            <End Role="Club" EntitySet="Clubs" />
             <End Role="Winners" EntitySet="Winners" />
           </AssociationSet>
           <AssociationSet Name="Match_fk0" Association="Self.Match_fk0">
-            <End Role="Stadium" EntitySet="Stadium" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Stadium" EntitySet="Stadia" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Match_fk3" Association="Self.Match_fk3">
-            <End Role="Referee" EntitySet="Referee" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Referee" EntitySet="Referees" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Match_fk4" Association="Self.Match_fk4">
-            <End Role="Referee" EntitySet="Referee" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Referee" EntitySet="Referees" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Match_fk5" Association="Self.Match_fk5">
-            <End Role="Referee" EntitySet="Referee" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Referee" EntitySet="Referees" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Match_fk6" Association="Self.Match_fk6">
-            <End Role="Referee" EntitySet="Referee" />
-            <End Role="Match" EntitySet="Match" />
+            <End Role="Referee" EntitySet="Referees" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
           <AssociationSet Name="Ticket_fk0" Association="Self.Ticket_fk0">
-            <End Role="Match" EntitySet="Match" />
-            <End Role="Ticket" EntitySet="Ticket" />
+            <End Role="Match" EntitySet="Matches" />
+            <End Role="Ticket" EntitySet="Tickets" />
           </AssociationSet>
           <AssociationSet Name="Timetable_fk0" Association="Self.Timetable_fk0">
-            <End Role="Match" EntitySet="Match" />
-            <End Role="Timetable" EntitySet="Timetable" />
+            <End Role="Match" EntitySet="Matches" />
+            <End Role="Timetable" EntitySet="Timetables" />
           </AssociationSet>
           <AssociationSet Name="Player_fk1" Association="Self.Player_fk1">
-            <End Role="Record" EntitySet="Record" />
-            <End Role="Player" EntitySet="Player" />
+            <End Role="Record" EntitySet="Records" />
+            <End Role="Player" EntitySet="Players" />
           </AssociationSet>
           <AssociationSet Name="Referee_fk0" Association="Self.Referee_fk0">
-            <End Role="Record" EntitySet="Record" />
-            <End Role="Referee" EntitySet="Referee" />
+            <End Role="Record" EntitySet="Records" />
+            <End Role="Referee" EntitySet="Referees" />
           </AssociationSet>
           <AssociationSet Name="TrainingStaff_fk1" Association="Self.TrainingStaff_fk1">
-            <End Role="Record" EntitySet="Record" />
-            <End Role="TrainingStaff" EntitySet="TrainingStaff" />
+            <End Role="Record" EntitySet="Records" />
+            <End Role="TrainingStaff" EntitySet="TrainingStaffs" />
           </AssociationSet>
           <AssociationSet Name="Timetable_fk1" Association="Self.Timetable_fk1">
-            <End Role="Referee" EntitySet="Referee" />
-            <End Role="Timetable" EntitySet="Timetable" />
+            <End Role="Referee" EntitySet="Referees" />
+            <End Role="Timetable" EntitySet="Timetables" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -887,20 +857,19 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SBDModelStoreContainer" CdmEntityContainer="SBDEntities">
-          <EntitySetMapping Name="Club">
-            <EntityTypeMapping TypeName="SBDModel.Club">
+        <EntityContainerMapping StorageEntityContainer="dbModelStoreContainer" CdmEntityContainer="dbEntities">
+          <EntitySetMapping Name="Clubs">
+            <EntityTypeMapping TypeName="dbModel.Club">
               <MappingFragment StoreEntitySet="Club">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="stadiumID" ColumnName="stadiumID" />
-                <ScalarProperty Name="trainingStaffID" ColumnName="trainingStaffID" />
                 <ScalarProperty Name="recordID" ColumnName="recordID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Match">
-            <EntityTypeMapping TypeName="SBDModel.Match">
+          <EntitySetMapping Name="Matches">
+            <EntityTypeMapping TypeName="dbModel.Match">
               <MappingFragment StoreEntitySet="Match">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="stadiumID" ColumnName="stadiumID" />
@@ -915,8 +884,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Player">
-            <EntityTypeMapping TypeName="SBDModel.Player">
+          <EntitySetMapping Name="Players">
+            <EntityTypeMapping TypeName="dbModel.Player">
               <MappingFragment StoreEntitySet="Player">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="firstName" ColumnName="firstName" />
@@ -926,8 +895,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Record">
-            <EntityTypeMapping TypeName="SBDModel.Record">
+          <EntitySetMapping Name="Records">
+            <EntityTypeMapping TypeName="dbModel.Record">
               <MappingFragment StoreEntitySet="Record">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="type" ColumnName="type" />
@@ -935,18 +904,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Referee">
-            <EntityTypeMapping TypeName="SBDModel.Referee">
+          <EntitySetMapping Name="Referees">
+            <EntityTypeMapping TypeName="dbModel.Referee">
               <MappingFragment StoreEntitySet="Referee">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="firstName" ColumnName="firstName" />
                 <ScalarProperty Name="lastName" ColumnName="lastName" />
                 <ScalarProperty Name="recordID" ColumnName="recordID" />
+                <ScalarProperty Name="salary" ColumnName="salary" />
+                <ScalarProperty Name="isBusy" ColumnName="isBusy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Stadium">
-            <EntityTypeMapping TypeName="SBDModel.Stadium">
+          <EntitySetMapping Name="Stadia">
+            <EntityTypeMapping TypeName="dbModel.Stadium">
               <MappingFragment StoreEntitySet="Stadium">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -955,17 +926,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Ticket">
-            <EntityTypeMapping TypeName="SBDModel.Ticket">
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="dbModel.Ticket">
               <MappingFragment StoreEntitySet="Ticket">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="matchID" ColumnName="matchID" />
                 <ScalarProperty Name="PESEL" ColumnName="PESEL" />
+                <ScalarProperty Name="date" ColumnName="date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Timetable">
-            <EntityTypeMapping TypeName="SBDModel.Timetable">
+          <EntitySetMapping Name="Timetables">
+            <EntityTypeMapping TypeName="dbModel.Timetable">
               <MappingFragment StoreEntitySet="Timetable">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="matchID" ColumnName="matchID" />
@@ -973,8 +945,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TrainingStaff">
-            <EntityTypeMapping TypeName="SBDModel.TrainingStaff">
+          <EntitySetMapping Name="TrainingStaffs">
+            <EntityTypeMapping TypeName="dbModel.TrainingStaff">
               <MappingFragment StoreEntitySet="TrainingStaff">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="firstName" ColumnName="firstName" />
@@ -987,7 +959,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Winners">
-            <EntityTypeMapping TypeName="SBDModel.Winners">
+            <EntityTypeMapping TypeName="dbModel.Winner">
               <MappingFragment StoreEntitySet="Winners">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="clubID" ColumnName="clubID" />
@@ -1013,7 +985,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

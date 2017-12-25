@@ -12,7 +12,7 @@ namespace Football
     using System;
     using System.Collections.Generic;
     
-    public partial class Winners
+    public partial class Winner
     {
         public int id { get; set; }
         public int clubID { get; set; }

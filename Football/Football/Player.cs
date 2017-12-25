@@ -17,7 +17,7 @@ namespace Football
         public int id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
-        public int clubID { get; set; }
+        public Nullable<int> clubID { get; set; }
         public Nullable<int> recordID { get; set; }
     
         public virtual Club Club { get; set; }

@@ -17,8 +17,8 @@ namespace Football
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Stadium()
         {
-            this.Club = new HashSet<Club>();
-            this.Match = new HashSet<Match>();
+            this.Clubs = new HashSet<Club>();
+            this.Matches = new HashSet<Match>();
         }
     
         public int id { get; set; }
@@ -27,8 +27,8 @@ namespace Football
         public string country { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Club> Club { get; set; }
+        public virtual ICollection<Club> Clubs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Match> Match { get; set; }
+        public virtual ICollection<Match> Matches { get; set; }
     }
 }

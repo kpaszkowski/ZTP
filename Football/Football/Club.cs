@@ -17,31 +17,29 @@ namespace Football
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Club()
         {
-            this.Match = new HashSet<Match>();
-            this.Match1 = new HashSet<Match>();
-            this.Player = new HashSet<Player>();
-            this.TrainingStaff1 = new HashSet<TrainingStaff>();
-            this.Winners = new HashSet<Winners>();
+            this.Matches = new HashSet<Match>();
+            this.Matches1 = new HashSet<Match>();
+            this.Players = new HashSet<Player>();
+            this.TrainingStaffs = new HashSet<TrainingStaff>();
+            this.Winners = new HashSet<Winner>();
         }
     
         public int id { get; set; }
         public string name { get; set; }
-        public int stadiumID { get; set; }
-        public int trainingStaffID { get; set; }
+        public Nullable<int> stadiumID { get; set; }
         public Nullable<int> recordID { get; set; }
     
         public virtual Stadium Stadium { get; set; }
-        public virtual TrainingStaff TrainingStaff { get; set; }
         public virtual Record Record { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Match> Match { get; set; }
+        public virtual ICollection<Match> Matches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Match> Match1 { get; set; }
+        public virtual ICollection<Match> Matches1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Player> Player { get; set; }
+        public virtual ICollection<Player> Players { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TrainingStaff> TrainingStaff1 { get; set; }
+        public virtual ICollection<TrainingStaff> TrainingStaffs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Winners> Winners { get; set; }
+        public virtual ICollection<Winner> Winners { get; set; }
     }
 }

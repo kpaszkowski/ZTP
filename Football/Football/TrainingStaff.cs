@@ -14,23 +14,15 @@ namespace Football
     
     public partial class TrainingStaff
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TrainingStaff()
-        {
-            this.Club = new HashSet<Club>();
-        }
-    
         public int id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public int age { get; set; }
         public string duty { get; set; }
-        public int clubID { get; set; }
+        public Nullable<int> clubID { get; set; }
         public Nullable<int> recordID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Club> Club { get; set; }
-        public virtual Club Club1 { get; set; }
+        public virtual Club Club { get; set; }
         public virtual Record Record { get; set; }
     }
 }
