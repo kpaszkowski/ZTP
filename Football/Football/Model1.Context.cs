@@ -13,10 +13,10 @@ namespace Football
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class dbEntities : DbContext
+    public partial class dbEntities1 : DbContext
     {
-        public dbEntities()
-            : base("name=dbEntities")
+        public dbEntities1()
+            : base("name=dbEntities1")
         {
         }
     
@@ -25,15 +25,15 @@ namespace Football
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Club> Clubs { get; set; }
-        public virtual DbSet<Match> Matches { get; set; }
-        public virtual DbSet<Player> Players { get; set; }
-        public virtual DbSet<Record> Records { get; set; }
-        public virtual DbSet<Referee> Referees { get; set; }
-        public virtual DbSet<Stadium> Stadia { get; set; }
-        public virtual DbSet<Ticket> Tickets { get; set; }
-        public virtual DbSet<Timetable> Timetables { get; set; }
-        public virtual DbSet<TrainingStaff> TrainingStaffs { get; set; }
-        public virtual DbSet<Winner> Winners { get; set; }
+        public virtual DbSet<Club> Club { get; set; }
+        public virtual DbSet<Match> Match { get; set; }
+        public virtual DbSet<Player> Player { get; set; }
+        public virtual DbSet<Record> Record { get; set; }
+        public virtual DbSet<Referee> Referee { get; set; }
+        public virtual DbSet<Stadium> Stadium { get; set; }
+        public virtual DbSet<Ticket> Ticket { get; set; }
+        public virtual DbSet<Timetable> Timetable { get; set; }
+        public virtual DbSet<TrainingStaff> TrainingStaff { get; set; }
+        public virtual DbSet<Winners> Winners { get; set; }
     }
 }

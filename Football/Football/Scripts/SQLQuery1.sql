@@ -1,133 +1,133 @@
 ﻿CREATE TABLE [Player] (
-	id integer NOT NULL,
-	firstName varchar(64) NOT NULL,
-	lastName varchar(64) NOT NULL,
-	clubID integer,
-	recordID integer,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[firstName] varchar(64) NOT NULL,
+	[lastName] varchar(64) NOT NULL,
+	[clubID] integer,
+	[recordID] integer,
   CONSTRAINT [PK_PLAYER] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Club] (
-	id integer NOT NULL,
-	name varchar(64) NOT NULL,
-	stadiumID integer,
-	recordID integer,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[name] varchar(64) NOT NULL,
+	[stadiumID] integer,
+	[recordID] integer,
   CONSTRAINT [PK_CLUB] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [TrainingStaff] (
-	id integer NOT NULL,
-	firstName varchar(64) NOT NULL,
-	lastName varchar(64) NOT NULL,
-	age integer NOT NULL,
-	duty varchar(64) NOT NULL,
-	clubID integer,
-	recordID integer,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[firstName] varchar(64) NOT NULL,
+	[lastName] varchar(64) NOT NULL,
+	[age] integer NOT NULL,
+	[duty] varchar(64) NOT NULL,
+	[clubID] integer,
+	[recordID] integer,
   CONSTRAINT [PK_TRAININGSTAFF] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Stadium] (
-	id integer NOT NULL,
-	name varchar(64) NOT NULL,
-	city varchar(64) NOT NULL,
-	country varchar(64) NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[name] varchar(64) NOT NULL,
+	[city] varchar(64) NOT NULL,
+	[country] varchar(64) NOT NULL,
   CONSTRAINT [PK_STADIUM] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  ) 
 
 )
 GO
 CREATE TABLE [Timetable] (
-	id integer NOT NULL,
-	matchID integer NOT NULL,
-	refereeID integer NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[matchID] integer NOT NULL,
+	[refereeID] integer NOT NULL,
   CONSTRAINT [PK_TIMETABLE] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Match] (
-	id integer NOT NULL,
-	stadiumID integer NOT NULL,
-	hostID integer NOT NULL,
-	guestID integer NOT NULL,
-	mainRefereeID integer NOT NULL,
-	technicalRefereeID integer NOT NULL,
-	linesRefereeID integer NOT NULL,
-	observerRefereeID integer NOT NULL,
-	hostGoals integer NOT NULL,
-	guestGoals integer NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[stadiumID] integer NOT NULL,
+	[hostID] integer NOT NULL,
+	[guestID] integer NOT NULL,
+	[mainRefereeID] integer NOT NULL,
+	[technicalRefereeID] integer NOT NULL,
+	[linesRefereeID] integer NOT NULL,
+	[observerRefereeID] integer NOT NULL,
+	[hostGoals] integer NOT NULL,
+	[guestGoals] integer NOT NULL,
   CONSTRAINT [PK_MATCH] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Referee] (
-	id integer NOT NULL,
-	firstName varchar(64) NOT NULL,
-	lastName varchar(64) NOT NULL,
-	recordID integer,
-	salary float NOT NULL,
-	isBusy integer NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[firstName] varchar(64) NOT NULL,
+	[lastName] varchar(64) NOT NULL,
+	[recordID] integer,
+	[salary] float NOT NULL,
+	[isBusy] integer NOT NULL,
   CONSTRAINT [PK_REFEREE] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Record] (
-	id integer NOT NULL,
-	type varchar(64) NOT NULL,
-	name varchar(64) NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[type] varchar(64) NOT NULL,
+	[name] varchar(64) NOT NULL,
   CONSTRAINT [PK_RECORD] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Ticket] (
-	id integer NOT NULL,
-	matchID integer NOT NULL,
-	PESEL varchar(20) NOT NULL,
-	date date NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[matchID] integer NOT NULL,
+	[PESEL] varchar(20) NOT NULL,
+	[date] date NOT NULL,
   CONSTRAINT [PK_TICKET] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO
 CREATE TABLE [Winners] (
-	id integer NOT NULL,
-	clubID integer NOT NULL,
-	year varchar(4) NOT NULL,
-	wonMatches integer NOT NULL,
-	lostMatches integer NOT NULL,
-	goalsScored integer NOT NULL,
-	goalsLost integer NOT NULL,
+	[id]   INT           IDENTITY (1, 1) NOT NULL,
+	[clubID] integer NOT NULL,
+	[year] varchar(4) NOT NULL,
+	[wonMatches] integer NOT NULL,
+	[lostMatches] integer NOT NULL,
+	[goalsScored] integer NOT NULL,
+	[goalsLost] integer NOT NULL,
   CONSTRAINT [PK_WINNERS] PRIMARY KEY CLUSTERED
   (
   [id] ASC
-  ) WITH (IGNORE_DUP_KEY = OFF)
+  )
 
 )
 GO

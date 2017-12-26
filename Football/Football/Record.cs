@@ -17,10 +17,10 @@ namespace Football
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Record()
         {
-            this.Clubs = new HashSet<Club>();
-            this.Players = new HashSet<Player>();
-            this.Referees = new HashSet<Referee>();
-            this.TrainingStaffs = new HashSet<TrainingStaff>();
+            this.Club = new HashSet<Club>();
+            this.Player = new HashSet<Player>();
+            this.Referee = new HashSet<Referee>();
+            this.TrainingStaff = new HashSet<TrainingStaff>();
         }
     
         public int id { get; set; }
@@ -28,12 +28,12 @@ namespace Football
         public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Club> Clubs { get; set; }
+        public virtual ICollection<Club> Club { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Player> Players { get; set; }
+        public virtual ICollection<Player> Player { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Referee> Referees { get; set; }
+        public virtual ICollection<Referee> Referee { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TrainingStaff> TrainingStaffs { get; set; }
+        public virtual ICollection<TrainingStaff> TrainingStaff { get; set; }
     }
 }

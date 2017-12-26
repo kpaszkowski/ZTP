@@ -23,8 +23,6 @@ namespace Football
         public MainWindow()
         {
             InitializeComponent();
-            StadiumService stadium = new StadiumService();
-            stadium.AddStadium("a", "b", "c");
         }
     }
 }

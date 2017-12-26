@@ -17,8 +17,8 @@ namespace Football
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Match()
         {
-            this.Tickets = new HashSet<Ticket>();
-            this.Timetables = new HashSet<Timetable>();
+            this.Ticket = new HashSet<Ticket>();
+            this.Timetable = new HashSet<Timetable>();
         }
     
         public int id { get; set; }
@@ -40,8 +40,8 @@ namespace Football
         public virtual Referee Referee2 { get; set; }
         public virtual Referee Referee3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<Ticket> Ticket { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Timetable> Timetables { get; set; }
+        public virtual ICollection<Timetable> Timetable { get; set; }
     }
 }

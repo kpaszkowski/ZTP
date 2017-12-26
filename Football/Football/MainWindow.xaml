@@ -4,9 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Football"
+        xmlns:local1="clr-namespace:Football.ViewModel.Window"
+        xmlns:local2="clr-namespace:Football.Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525"
+        DataContext="{DynamicResource MainViewModel}">
+    <Window.Resources>
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
+        <local2:Converter x:Key="Converter"></local2:Converter>
+    </Window.Resources>
     <Grid>
-        
+        <DataGrid IsReadOnly="True" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" Margin="0,0,373,209"/>
+        <Button Content="Dodaj Stadion" Command="{Binding AddStadiumCommand}" Margin="0,115,390,169">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource Converter}">
+                    <Binding Path="Text" ElementName="tbName"/>
+                    <Binding Path="Text" ElementName="tbCity"/>
+                    <Binding Path="Text" ElementName="tbCountry"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+        <Button Content="Usuń stadion" Command="{Binding RemoveStadiumCommand}" CommandParameter="{Binding SelectedStadium}" Margin="0,155,390,129"/>
+        <TextBox Name="tbName" HorizontalAlignment="Left" Height="23" Margin="149,38,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="tbCity" HorizontalAlignment="Left" Height="23" Margin="149,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox Name="tbCountry" HorizontalAlignment="Left" Height="23" Margin="149,66,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
