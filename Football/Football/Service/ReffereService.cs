@@ -38,7 +38,7 @@ namespace Football.Service
                 using (dbEntities1 context = new dbEntities1())
                 {
                     Referee referee = context.Referee.FirstOrDefault(x => x.id == reffereID);
-                    if (!CanRemoveReffere(referee))//nie posiada graczy ani członków sztabu
+                    if (!CanRemoveReffere(referee))
                     {
                         return false;
                     }

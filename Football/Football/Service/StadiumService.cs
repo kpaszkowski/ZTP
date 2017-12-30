@@ -56,6 +56,10 @@ namespace Football
             {
                 return false;
             }
+            if (stadium.Match.Count != 0)
+            {
+                return false;
+            }
             return true;
         }
 

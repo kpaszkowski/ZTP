@@ -90,6 +90,14 @@ namespace Football
             {
                 return false;
             }
+            if (club.Match.Count!=0)
+            {
+                return false;
+            }
+            if (club.Match1.Count != 0)
+            {
+                return false;
+            }
             return true;
         }
 

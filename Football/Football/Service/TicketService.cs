@@ -9,18 +9,19 @@ namespace Football.Service
 {
     public class TicketService
     {
-        public void AddTicket(string PESEL, long matchID, DateTime date)
+        public void AddTicket(string PESEL, long matchID, string date)
         {
             try
             {
                 using (dbEntities1 context = new dbEntities1())
                 {
+                    DateTime myDate = DateTime.Parse(date);
                     Match match = context.Match.FirstOrDefault(x => x.id == matchID);
                     Ticket ticket = new Ticket
                     {
                         Match = match,
                         PESEL = PESEL,
-                        date = date,
+                        date = myDate,
                     };
                     context.Ticket.Add(ticket);
                     context.SaveChanges();
@@ -118,6 +119,7 @@ namespace Football.Service
                     {
                         context.Ticket.Remove(item);
                     }
+                    context.SaveChanges();
                     return true;
                 }
             }

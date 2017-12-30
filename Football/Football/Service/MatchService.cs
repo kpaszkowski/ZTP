@@ -11,7 +11,7 @@ namespace Football.Service
     {
         TicketService ticketService = new TicketService();
 
-        public void Addmatch(string name, string stadiumName,long hostID,long guestID,long mainReffereID,long technicalReffereID,long linearReffereID,long observerReffereID,int hostGoals,int guestGoals)
+        public void AddMatch(string stadiumName,long hostID,long guestID,long mainReffereID,long technicalReffereID,long linearReffereID,long observerReffereID,int hostGoals,int guestGoals)
         {
             try
             {
@@ -45,6 +45,43 @@ namespace Football.Service
                 throw e;
             }
         }
+
+        public void AddMatchByTagName(string stadiumName, string hostID, string guestID, string mainReffereID, string technicalReffereID, string linearReffereID, string observerReffereID, int hostGoals, int guestGoals)
+        {
+            try
+            {
+                using (dbEntities1 context = new dbEntities1())
+                {
+                    Stadium stadium = context.Stadium.FirstOrDefault(x => x.name == stadiumName);
+                    Club hostClub = context.Club.FirstOrDefault(x => x.name == hostID);
+                    Club guestClub = context.Club.FirstOrDefault(x => x.name == guestID);
+                    Referee mainReffere = context.Referee.FirstOrDefault(x => x.lastName == mainReffereID);
+                    Referee technicalReffere = context.Referee.FirstOrDefault(x => x.lastName == technicalReffereID);
+                    Referee linearReffere = context.Referee.FirstOrDefault(x => x.lastName == linearReffereID);
+                    Referee observerReffere = context.Referee.FirstOrDefault(x => x.lastName == observerReffereID);
+                    Match match = new Match
+                    {
+                        Stadium=stadium,
+                        Club = hostClub,
+                        Club1 = guestClub,
+                        Referee = mainReffere,
+                        Referee1 = technicalReffere,
+                        Referee2 = linearReffere,
+                        Referee3 = observerReffere,
+                        hostGoals = hostGoals,
+                        guestGoals = guestGoals
+                    };
+                    context.Match.Add(match);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
         public bool RemoveMatch(long matchID)
         {
             try
@@ -71,6 +108,10 @@ namespace Football.Service
 
         private bool CanRemoveMatch(Match match)
         {
+            //if (match.Ticket.Count != 0)
+            //{
+            //    return false;
+            //}
             return true;
         }
 
