@@ -24,17 +24,18 @@ namespace Football.ViewModel
         //        }
         //    }
         //}
+        string _Name;
         public string Name
         {
             get
             {
-                return Name;
+                return _Name;
             }
             set
             {
-                if (Name != value)
+                if (_Name != value)
                 {
-                    Name = value;
+                    _Name = value;
                     RaisePropertyChanged("Name");
                 }
             }
