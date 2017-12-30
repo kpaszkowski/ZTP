@@ -33,6 +33,22 @@ namespace Football.ViewModel.Window
                 }
             }
         }
+        object _SelectedClub;
+        public object SelectedClub
+        {
+            get
+            {
+                return _SelectedClub;
+            }
+            set
+            {
+                if (_SelectedClub != value)
+                {
+                    _SelectedClub = value;
+                    RaisePropertyChanged("SelectedClub");
+                }
+            }
+        }
         public RelayCommand AddStadiumCommand { get; set; }
         public RelayCommand RemoveStadiumCommand { get; set; }
         public RelayCommand AddClubCommand { get; set; }
@@ -79,10 +95,14 @@ namespace Football.ViewModel.Window
         {
             if (parameter == null) return;
             var values = (StadiumViewModel)parameter;
-            if (false)//validacja na tabele
+            if (stadiumService.RemoveStadium(values.ID))
             {
-                stadiumService.RemoveStadium(values.Name, values.City, values.Country);
                 UpdateStadiumGrid();
+            }
+            else
+            {
+                AlertWindow alert = new AlertWindow();
+                alert.ShowDialog();
             }
 
         }
@@ -93,7 +113,7 @@ namespace Football.ViewModel.Window
             stadium.Clear();
             foreach (Stadium item in s)
             {
-                stadium.Add(new StadiumViewModel { Name = item.name, City = item.city, Country = item.country });
+                stadium.Add(new StadiumViewModel {ID=item.id, Name = item.name, City = item.city, Country = item.country });
             }
         }
 
@@ -120,7 +140,17 @@ namespace Football.ViewModel.Window
 
         void RemoveClub(object parameter)
         {
-
+            if (parameter == null) return;
+            var values = (ClubViewModel)parameter;
+            if (clubService.RemoveClub(values.ID))
+            {
+                UpdateClubGrid();
+            }
+            else
+            {
+                AlertWindow alert = new AlertWindow();
+                alert.ShowDialog();
+            }
         }
 
 
@@ -128,9 +158,9 @@ namespace Football.ViewModel.Window
         {
             var c = clubService.GetAllClub();
             club.Clear();
-            foreach (Club item in c)
+            foreach (ClubViewModel item in c)
             {
-                club.Add(new ClubViewModel { Name = item.name});
+                club.Add(item);
             }
         }
         #endregion

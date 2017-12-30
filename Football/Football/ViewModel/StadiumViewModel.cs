@@ -9,9 +9,26 @@ namespace Football
 {
     public class StadiumViewModel : INotifyPropertyChanged
     {
+
         string _Name;
         string _City;
         string _Country;
+        long _ID;
+        public long ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                if (_ID != value)
+                {
+                    _ID = value;
+                    RaisePropertyChanged("ID");
+                }
+            }
+        }
         public string Name
         {
             get

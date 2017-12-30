@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Football.ViewModel
 {
-    public class ClubViewModel : INotifyPropertyChanged
+    public class TicketViewModel
     {
-        int _ID;
-        public int ID
+        long _ID;
+        public long ID
         {
             get
             {
@@ -25,45 +25,37 @@ namespace Football.ViewModel
                 }
             }
         }
-        string _Name;
-        public string Name
+        string _PESEL;
+        public string PESEL
         {
             get
             {
-                return _Name;
+                return _PESEL;
             }
             set
             {
-                if (_Name != value)
+                if (_PESEL != value)
                 {
-                    _Name = value;
-                    RaisePropertyChanged("Name");
+                    _PESEL = value;
+                    RaisePropertyChanged("PESEL");
                 }
             }
         }
-
-        string _Stadium;
-        public string Stadium_Name
+        DateTime _date;
+        public DateTime Date
         {
             get
             {
-                return _Stadium;
+                return _date;
             }
             set
             {
-                if (_Stadium != value)
+                if (_date != value)
                 {
-                    _Stadium = value;
-                    RaisePropertyChanged("Stadium");
+                    _date = value;
+                    RaisePropertyChanged("Date");
                 }
             }
-        }
-
-        public void UpdateFromModel(Club club)
-        {
-            //this.ID = club.id;
-            this.Name = club.name;
-            
         }
 
         void RaisePropertyChanged(string prop)

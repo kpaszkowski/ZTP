@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Football.ViewModel
 {
-    public class ClubViewModel : INotifyPropertyChanged
+    public class ReffereViewModel
     {
-        int _ID;
-        public int ID
+        long _ID;
+        public long ID
         {
             get
             {
@@ -25,45 +25,53 @@ namespace Football.ViewModel
                 }
             }
         }
-        string _Name;
-        public string Name
+        string _firstName;
+        public string FirstName
         {
             get
             {
-                return _Name;
+                return _firstName;
             }
             set
             {
-                if (_Name != value)
+                if (_firstName != value)
                 {
-                    _Name = value;
-                    RaisePropertyChanged("Name");
+                    _firstName = value;
+                    RaisePropertyChanged("FirstName");
                 }
             }
         }
-
-        string _Stadium;
-        public string Stadium_Name
+        string _lastName;
+        public string LastName
         {
             get
             {
-                return _Stadium;
+                return _lastName;
             }
             set
             {
-                if (_Stadium != value)
+                if (_lastName != value)
                 {
-                    _Stadium = value;
-                    RaisePropertyChanged("Stadium");
+                    _lastName = value;
+                    RaisePropertyChanged("LastName");
                 }
             }
         }
-
-        public void UpdateFromModel(Club club)
+        double _salary;
+        public double Salary
         {
-            //this.ID = club.id;
-            this.Name = club.name;
-            
+            get
+            {
+                return _salary;
+            }
+            set
+            {
+                if (_salary != value)
+                {
+                    _salary = value;
+                    RaisePropertyChanged("Salary");
+                }
+            }
         }
 
         void RaisePropertyChanged(string prop)

@@ -9,7 +9,7 @@ namespace Football
 {
     public class StadiumService
     {
-        public void AddStadium(Stadium stadium)
+        public bool AddStadium(Stadium stadium)
         {
             try
             {
@@ -17,6 +17,7 @@ namespace Football
                 {
                     context.Stadium.Add(stadium);
                     context.SaveChanges();
+                    return true;
                 }
             }
             catch (Exception e)
@@ -26,28 +27,36 @@ namespace Football
             }
         }
 
-        public void RemoveStadium(string name,string city,string country)
+        public bool RemoveStadium(long stadiumID)
         {
             try
             {
                 using (dbEntities1 context = new dbEntities1())
                 {
-                    Stadium stadium = context.Stadium.FirstOrDefault(x => x.name == name && x.city == city && x.country == country);
-                    if (stadium!=null)
+                    Stadium stadium = context.Stadium.FirstOrDefault(x=>x.id==stadiumID);
+
+                    if (!CanRemoveStadium(stadium))//nie posiada przypisanych klubów
                     {
-                        context.Stadium.Remove(stadium);
-                        context.SaveChanges();
+                        return false;
                     }
-                    else
-                    {
-                        //brak rekordu
-                    }
+                    context.Stadium.Remove(stadium);
+                    context.SaveChanges();
+                    return true;
                 }
             }
             catch(Exception e)
             {
                 throw e;
             }
+        }
+
+        private bool CanRemoveStadium(Stadium stadium)
+        {
+            if (stadium.Club.Count != 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         internal List<Stadium> GetAllStadium()

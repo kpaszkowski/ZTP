@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Football.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,30 +9,30 @@ namespace Football
 {
     public class ClubService
     {
-        public void AddClub(string name, Stadium stadium)
-        {
-            try
-            {
-                using (dbEntities1 context = new dbEntities1())
-                {
-                    Club club = new Club
-                    {
-                        name = name,
-                    };
-                    if (stadium!=null)
-                    {
-                        club.Stadium = stadium;
-                    }
-                    context.Club.Add(club);
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
+        //public void AddClub(string name, Stadium stadium)
+        //{
+        //    try
+        //    {
+        //        using (dbEntities1 context = new dbEntities1())
+        //        {
+        //            Club club = new Club
+        //            {
+        //                name = name,
+        //            };
+        //            if (stadium!=null)
+        //            {
+        //                club.Stadium = stadium;
+        //            }
+        //            context.Club.Add(club);
+        //            context.SaveChanges();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                throw e;
-            }
-        }
+        //        throw e;
+        //    }
+        //}
 
         public void AddClub(string name, string stadiumName)
         {
@@ -56,22 +57,20 @@ namespace Football
             }
         }
 
-        public void RemoveClub(string name)
+        public bool RemoveClub(int clubID)
         {
             try
             {
                 using (dbEntities1 context = new dbEntities1())
                 {
-                    Club club = context.Club.FirstOrDefault(x => x.name == name);
-                    if (club!=null)
+                    Club club = context.Club.FirstOrDefault(x => x.id==clubID);
+                    if (!CanRemoveClub(club))//nie posiada graczy ani członków sztabu
                     {
-                        context.Club.Remove(club);
-                        context.SaveChanges();
+                        return false;
                     }
-                    else
-                    {
-                        //brak recordu
-                    }
+                    context.Club.Remove(club);
+                    context.SaveChanges();
+                    return true;
                 }
             }
             catch (Exception e)
@@ -81,14 +80,35 @@ namespace Football
             }
         }
 
-        internal List<Club> GetAllClub()
+        private bool CanRemoveClub(Club club)
+        {
+            if (club.Player.Count!=0)
+            {
+                return false;
+            }
+            if (club.TrainingStaff.Count!=0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        internal List<ClubViewModel> GetAllClub()
         {
             try
             {
                 using (dbEntities1 context = new dbEntities1())
                 {
-                    List<Club> stadium = context.Club.ToList();
-                    return stadium;
+                    List<Club> clubList = context.Club.ToList();
+
+                    List<ClubViewModel> list = new List<ClubViewModel>();
+
+                    foreach (Club item in clubList)
+                    {
+                        list.Add(new ClubViewModel { ID = item.id, Name = item.name, Stadium_Name = item.Stadium!=null? item.Stadium.name:String.Empty });
+                    }
+
+                    return list;
                 }
             }
             catch (Exception e)
