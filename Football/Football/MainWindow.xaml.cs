@@ -25,5 +25,36 @@ namespace Football
             InitializeComponent();
         }
 
+        private void SaC_Click(object sender, RoutedEventArgs e)
+        {
+            ClubsAndStadions window = new ClubsAndStadions();
+            if (window.ShowDialog() == true)
+            {
+            }
+        }
+
+        private void PaS_Click(object sender, RoutedEventArgs e)
+        {
+            ClubStaff window = new ClubStaff();
+            if (window.ShowDialog() == true)
+            {
+            }
+        }
+
+        private void Re_Click(object sender, RoutedEventArgs e)
+        {
+            Referees window = new Referees();
+            if (window.ShowDialog() == true)
+            {
+            }
+        }
+
+        private void Seas_Click(object sender, RoutedEventArgs e)
+        {
+            Season window = new Season();
+            if (window.ShowDialog() == true)
+            {
+            }
+        }
     }
 }

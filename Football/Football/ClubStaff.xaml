@@ -1,0 +1,62 @@
+﻿<Window x:Class="Football.ClubStaff"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Football"
+        xmlns:local1="clr-namespace:Football.ViewModel.Window"
+        xmlns:local2="clr-namespace:Football.Converter"
+        mc:Ignorable="d"
+        Title="Panel administracyjny - Członkowie klubu" Height="350" Width="525">
+
+    <Window.Resources>
+        <!--     <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>-->
+        <local2:Converter x:Key="Converter"></local2:Converter>
+    </Window.Resources>
+
+    <Grid>
+        <TabControl RenderTransformOrigin="0.497,0.889" HorizontalAlignment="Right" Width="517">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabControl}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="Assets\background.jpg"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Gracz">
+                <DockPanel>
+                    <!--player-->
+                    <StackPanel Margin="0,21,0,0">
+                        
+                        <Button Name="AddPlayer" VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Dodaj nowego zawodnika"   Height="41" Width="187"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="AddPlayer_Click"/>
+             </StackPanel>
+                    <StackPanel Margin="0,21,0,0">
+
+                            <Button x:Name="SearchPlayer" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Szukaj"   Height="43" Width="187"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="SearchPlayer_Click"/>
+
+                    </StackPanel>
+
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Personel" Height="22" VerticalAlignment="Bottom">
+                <DockPanel>
+                    <!--staff-->
+                    <StackPanel Margin="0,21,0,0">
+
+                        <Button Name="AddStaff" VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Dodaj członka personelu"   Height="41" Width="187"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="AddStaff_Click"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,21,0,0">
+
+                        <Button x:Name="SearchStaff" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Szukaj"   Height="43" Width="187"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="SearchStaff_Click"/>
+
+                    </StackPanel>
+
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
+
+

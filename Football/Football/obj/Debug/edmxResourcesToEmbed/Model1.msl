@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="dbModelStoreContainer" CdmEntityContainer="dbEntities1">
+    <EntitySetMapping Name="Club">
+      <EntityTypeMapping TypeName="dbModel.Club">
+        <MappingFragment StoreEntitySet="Club">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="stadiumID" ColumnName="stadiumID" />
+          <ScalarProperty Name="recordID" ColumnName="recordID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Match">
+      <EntityTypeMapping TypeName="dbModel.Match">
+        <MappingFragment StoreEntitySet="Match">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="stadiumID" ColumnName="stadiumID" />
+          <ScalarProperty Name="hostID" ColumnName="hostID" />
+          <ScalarProperty Name="guestID" ColumnName="guestID" />
+          <ScalarProperty Name="mainRefereeID" ColumnName="mainRefereeID" />
+          <ScalarProperty Name="technicalRefereeID" ColumnName="technicalRefereeID" />
+          <ScalarProperty Name="linesRefereeID" ColumnName="linesRefereeID" />
+          <ScalarProperty Name="observerRefereeID" ColumnName="observerRefereeID" />
+          <ScalarProperty Name="hostGoals" ColumnName="hostGoals" />
+          <ScalarProperty Name="guestGoals" ColumnName="guestGoals" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Player">
+      <EntityTypeMapping TypeName="dbModel.Player">
+        <MappingFragment StoreEntitySet="Player">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="clubID" ColumnName="clubID" />
+          <ScalarProperty Name="recordID" ColumnName="recordID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Record">
+      <EntityTypeMapping TypeName="dbModel.Record">
+        <MappingFragment StoreEntitySet="Record">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Referee">
+      <EntityTypeMapping TypeName="dbModel.Referee">
+        <MappingFragment StoreEntitySet="Referee">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="recordID" ColumnName="recordID" />
+          <ScalarProperty Name="salary" ColumnName="salary" />
+          <ScalarProperty Name="isBusy" ColumnName="isBusy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stadium">
+      <EntityTypeMapping TypeName="dbModel.Stadium">
+        <MappingFragment StoreEntitySet="Stadium">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="country" ColumnName="country" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ticket">
+      <EntityTypeMapping TypeName="dbModel.Ticket">
+        <MappingFragment StoreEntitySet="Ticket">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="matchID" ColumnName="matchID" />
+          <ScalarProperty Name="PESEL" ColumnName="PESEL" />
+          <ScalarProperty Name="date" ColumnName="date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Timetable">
+      <EntityTypeMapping TypeName="dbModel.Timetable">
+        <MappingFragment StoreEntitySet="Timetable">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="matchID" ColumnName="matchID" />
+          <ScalarProperty Name="refereeID" ColumnName="refereeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TrainingStaff">
+      <EntityTypeMapping TypeName="dbModel.TrainingStaff">
+        <MappingFragment StoreEntitySet="TrainingStaff">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="age" ColumnName="age" />
+          <ScalarProperty Name="duty" ColumnName="duty" />
+          <ScalarProperty Name="clubID" ColumnName="clubID" />
+          <ScalarProperty Name="recordID" ColumnName="recordID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Winners">
+      <EntityTypeMapping TypeName="dbModel.Winners">
+        <MappingFragment StoreEntitySet="Winners">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="clubID" ColumnName="clubID" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="wonMatches" ColumnName="wonMatches" />
+          <ScalarProperty Name="lostMatches" ColumnName="lostMatches" />
+          <ScalarProperty Name="goalsScored" ColumnName="goalsScored" />
+          <ScalarProperty Name="goalsLost" ColumnName="goalsLost" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
