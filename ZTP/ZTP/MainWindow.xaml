@@ -1,0 +1,139 @@
+﻿<Window x:Class="ZTP.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZTP"
+        xmlns:local2="clr-namespace:ZTP.Converter"
+        xmlns:local1="clr-namespace:ZTP.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525"
+        DataContext="{DynamicResource MainViewModel}">
+    <Window.Resources>
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
+        <local2:Converter x:Key="Converter"></local2:Converter>
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Stadium and Club">
+                <DockPanel>
+                    <!--stadium-->
+                    <StackPanel>
+                        <Button Content="Dodaj Stadion" Command="{Binding AddStadiumCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource Converter}">
+                                    <Binding Path="Text" ElementName="tbName"/>
+                                    <Binding Path="Text" ElementName="tbCity"/>
+                                    <Binding Path="Text" ElementName="tbCountry"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Usuń stadion" Command="{Binding RemoveStadiumCommand}" CommandParameter="{Binding SelectedStadium}"/>
+                        <TextBox Name="tbName" Text="Name"/>
+                        <TextBox Name="tbCity" Text="City"/>
+                        <TextBox Name="tbCountry" Text="Country"/>
+                        <ScrollViewer>
+                            <DataGrid IsReadOnly="True" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                    <!--club-->
+                    <StackPanel>
+                        <Button Content="Dodaj Klub" Command="{Binding AddClubCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource Converter}">
+                                    <Binding Path="Text" ElementName="tbNameClub"/>
+                                    <Binding Path="Text" ElementName="selectedstadium"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Usuń Klub" Command="{Binding RemoveClubCommand}" CommandParameter="{Binding SelectedClub}"/>
+                        <TextBox Name="tbNameClub" Text="Name"/>
+                        <ComboBox Name="selectedstadium" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" DisplayMemberPath="Name"/>
+                        <ScrollViewer>
+                            <DataGrid IsReadOnly="True" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub}"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Match and Ticket">
+                <DockPanel>
+                    <!--Match-->
+                    <StackPanel>
+                        <ComboBox Name="cbStadiumMatch" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" DisplayMemberPath="Name"/>
+                        <ComboBox Name="cbHostClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub}" DisplayMemberPath="Name"/>
+                        <ComboBox Name="cbGuestClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub2}" DisplayMemberPath="Name"/>
+                        <ComboBox Name="cbMainReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}" DisplayMemberPath="LastName"/>
+                        <ComboBox Name="cbTechnicalReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere2}" DisplayMemberPath="LastName"/>
+                        <ComboBox Name="cbLinearReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere3}" DisplayMemberPath="LastName"/>
+                        <ComboBox Name="cbObserverReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere4}" DisplayMemberPath="LastName"/>
+                        <TextBox Name="tbHostGoals" Text="3"/>
+                        <TextBox Name="tbGuestGoals" Text="1"/>
+                        <DatePicker x:Name="dpDateMatch" SelectedDateFormat="Long" SelectedDate="{Binding MyDateTimeProperty2, Mode=TwoWay}" ></DatePicker>
+                        <Button Content="Dodaj Mecz" Command="{Binding AddMatchCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource Converter}">
+                                    <Binding Path="Text" ElementName="cbStadiumMatch"/>
+                                    <Binding Path="Text" ElementName="cbHostClub"/>
+                                    <Binding Path="Text" ElementName="cbGuestClub"/>
+                                    <Binding Path="Text" ElementName="cbMainReffere"/>
+                                    <Binding Path="Text" ElementName="cbTechnicalReffere"/>
+                                    <Binding Path="Text" ElementName="cbLinearReffere"/>
+                                    <Binding Path="Text" ElementName="cbObserverReffere"/>
+                                    <Binding Path="Text" ElementName="tbHostGoals"/>
+                                    <Binding Path="Text" ElementName="tbGuestGoals"/>
+                                    <Binding Path="SelectedDate" ElementName="dpDateMatch"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Usuń mecz" Command="{Binding RemoveMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
+                        <ScrollViewer>
+                            <DataGrid IsReadOnly="True" ItemsSource="{Binding match}" SelectedItem="{Binding SelectedMatch}"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                    <!--Ticket-->
+                    <StackPanel>
+                        <ComboBox Name="cbTicketMatch" ItemsSource="{Binding match}" SelectedItem="{Binding SelectedMatch}" DisplayMemberPath="ID"/>
+                        <TextBox Name="tbPESELTicket" Text="95959595959"/>
+                        <Button Content="Dodaj Bilet" Command="{Binding AddTicketCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource Converter}">
+                                    <Binding Path="Text" ElementName="cbTicketMatch"/>
+                                    <Binding Path="Text" ElementName="tbPESELTicket"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Usuń bilet" Command="{Binding RemoveTicketCommand}" CommandParameter="{Binding SelectedTicket}"/>
+                        <ScrollViewer>
+                            <DataGrid IsReadOnly="True" ItemsSource="{Binding ticket}" SelectedItem="{Binding SelectedTicket}"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Reffere">
+                <DockPanel>
+                    <!--Reffere-->
+                    <StackPanel>
+                        <TextBox Name="tbReffereFirstName" Text="ReffereFirstName"/>
+                        <TextBox Name="tbReffereLastName" Text="ReffereLastName"/>
+                        <TextBox Name="tbReffereSalaryName" Text="5000"/>
+                        <TextBox Name="tbReffereRole" Text="Main"/>
+                        <Button Content="Dodaj Sedziego" Command="{Binding AddReffereCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource Converter}">
+                                    <Binding Path="Text" ElementName="tbReffereFirstName"/>
+                                    <Binding Path="Text" ElementName="tbReffereLastName"/>
+                                    <Binding Path="Text" ElementName="tbReffereSalaryName"/>
+                                    <Binding Path="Text" ElementName="tbReffereRole"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Usuń sędziego" Command="{Binding RemoveReffereCommand}" CommandParameter="{Binding SelectedReffere}"/>
+                        <ScrollViewer>
+                            <DataGrid IsReadOnly="True" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
