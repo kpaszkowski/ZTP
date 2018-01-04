@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -185,12 +187,14 @@ namespace ZTP.ViewModel
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
         public RelayCommand EditMatchCommand { get; set; }
+        public RelayCommand SaveData { get; set; }
 
         #endregion
 
         public MainViewModel()
         {
             InitializeCommands();
+            Load();
         }
 
         private void InitializeCommands()
@@ -206,6 +210,7 @@ namespace ZTP.ViewModel
             AddReffereCommand = new RelayCommand(AddReffere);
             RemoveReffereCommand = new RelayCommand(RemoveReffere);
             EditMatchCommand = new RelayCommand(EditMatch);
+            SaveData = new RelayCommand(Save);
 
             stadium = new ObservableCollection<Stadium>();
             club = new ObservableCollection<Club>();
@@ -291,13 +296,18 @@ namespace ZTP.ViewModel
                         break;
                     }
             }
-            long lastRefereeID = Helpers.FindMaxValue(reffere, x => x.ID);
-            foreach (Referee item in reffere.Where(x=>x.ID==lastRefereeID))
-            {
-                item.SetNextReferee(r);
-            }
+            SetNextReferee(r);
             reffere.Add(r);
             UpdatRefereeGrid();
+        }
+
+        private void SetNextReferee(Referee referee)
+        {
+            long lastRefereeID = Helpers.FindMaxValue(reffere, x => x.ID);
+            foreach (Referee item in reffere.Where(x => x.ID == lastRefereeID))
+            {
+                item.SetNextReferee(referee);
+            }
         }
 
         public void UpdatRefereeGrid()
@@ -314,6 +324,72 @@ namespace ZTP.ViewModel
                     Role = item.Role,
                     Salary = item.Salary
                 });
+            }
+        }
+
+        private void UpdatRefereeBase()
+        {
+            reffere.Clear();
+            Referee r = null;
+            foreach (RefereeView item in refereeView)
+            {
+                switch (item.Role)
+                {
+                    case "Main":
+                        {
+                            r = new MainReferee
+                            {
+                                ID = item.ID,
+                                FirstName = item.FirstName,
+                                LastName = item.LastName,
+                                IsBusy = item.IsBusy,
+                                Role = item.Role,
+                                Salary = item.Salary
+                            };
+                            break;
+                        }
+                    case "Technical":
+                        {
+                            r = new TechnicalReferee
+                            {
+                                ID = item.ID,
+                                FirstName = item.FirstName,
+                                LastName = item.LastName,
+                                IsBusy = item.IsBusy,
+                                Role = item.Role,
+                                Salary = item.Salary
+                            };
+                            break;
+                        }
+                    case "Linear":
+                        {
+                            r = new LinearReferee
+                            {
+                                ID = item.ID,
+                                FirstName = item.FirstName,
+                                LastName = item.LastName,
+                                IsBusy = item.IsBusy,
+                                Role = item.Role,
+                                Salary = item.Salary
+                            };
+                            break;
+                        }
+                    case "Observer":
+                        {
+                            r = new ObserverReferee
+                            {
+                                ID = item.ID,
+                                FirstName = item.FirstName,
+                                LastName = item.LastName,
+                                IsBusy = item.IsBusy,
+                                Role = item.Role,
+                                Salary = item.Salary
+                            };
+                            break;
+                        }
+                }
+                SetNextReferee(r);
+                reffere.Add(r);
             }
         }
 
@@ -473,6 +549,154 @@ namespace ZTP.ViewModel
             };
             stadium.Add(s);
         }
+
+        #endregion
+
+        #region File Operation
+
+        #region Save
+
+        public void Save(object parameters)
+        {
+            SaveStadium();
+            SaveClub();
+            SaveMatch();
+            SaveTicket();
+            SaveReferee();
+        }
+
+        private void SaveReferee()
+        {
+            string json = JsonConvert.SerializeObject(reffere);
+            string fileName = "referee.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
+        private void SaveTicket()
+        {
+            string json = JsonConvert.SerializeObject(ticket);
+            string fileName = "ticket.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
+        private void SaveMatch()
+        {
+            string json = JsonConvert.SerializeObject(match);
+            string fileName = "match.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
+        private void SaveClub()
+        {
+            string json = JsonConvert.SerializeObject(club);
+            string fileName = "club.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
+        private void SaveStadium()
+        {
+            string json = JsonConvert.SerializeObject(stadium);
+            string fileName = "stadium.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
+        #endregion
+
+        #region Load
+
+        public void Load()
+        {
+            LoadStadium();
+            LoadClub();
+            LoadMatch();
+            LoadTicket();
+            LoadReferee();
+        }
+
+        private void LoadReferee()
+        {
+            string fileName = "referee.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<RefereeView>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    refereeView.Add(item);
+                }
+            }
+            UpdatRefereeBase();
+            UpdatRefereeGrid();
+        }
+
+        private void LoadTicket()
+        {
+            string fileName = "ticket.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<Ticket>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    ticket.Add(item);
+                    match.Where(x => x.ID == item.MatchID).FirstOrDefault().Attach(item);
+                }
+            }
+        }
+
+        private void LoadMatch()
+        {
+            string fileName = "match.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<Match>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    match.Add(item);
+                }
+            }
+        }
+
+        private void LoadClub()
+        {
+            string fileName = "club.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<Club>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    club.Add(item);
+                }
+            }
+        }
+
+        private void LoadStadium()
+        {
+            string fileName = "stadium.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<Stadium>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    stadium.Add(item);
+                }
+            }
+        }
+
+        #endregion
 
         #endregion
     }
