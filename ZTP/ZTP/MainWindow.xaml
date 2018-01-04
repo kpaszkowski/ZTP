@@ -20,6 +20,7 @@
                     <!--stadium-->
                     <StackPanel>
                         <Button Content="Zapisz" Command="{Binding SaveData}"/>
+                        <Button Content="Wczytaj" Command="{Binding LoadData}"/>
                         <Button Content="Dodaj Stadion" Command="{Binding AddStadiumCommand}">
                             <Button.CommandParameter>
                                 <MultiBinding Converter="{StaticResource Converter}">

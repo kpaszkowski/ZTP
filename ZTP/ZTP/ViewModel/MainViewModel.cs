@@ -188,13 +188,13 @@ namespace ZTP.ViewModel
         public RelayCommand RemoveReffereCommand { get; set; }
         public RelayCommand EditMatchCommand { get; set; }
         public RelayCommand SaveData { get; set; }
+        public RelayCommand LoadData { get; set; }
 
         #endregion
 
         public MainViewModel()
         {
             InitializeCommands();
-            Load();
         }
 
         private void InitializeCommands()
@@ -211,6 +211,7 @@ namespace ZTP.ViewModel
             RemoveReffereCommand = new RelayCommand(RemoveReffere);
             EditMatchCommand = new RelayCommand(EditMatch);
             SaveData = new RelayCommand(Save);
+            LoadData = new RelayCommand(Load);
 
             stadium = new ObservableCollection<Stadium>();
             club = new ObservableCollection<Club>();
@@ -609,7 +610,7 @@ namespace ZTP.ViewModel
 
         #region Load
 
-        public void Load()
+        public void Load(object parameters)
         {
             LoadStadium();
             LoadClub();
