@@ -187,6 +187,7 @@ namespace ZTP.ViewModel
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
         public RelayCommand EditMatchCommand { get; set; }
+        public RelayCommand ReleaseRefereesCommand { get; set; }
         public RelayCommand SaveData { get; set; }
         public RelayCommand LoadData { get; set; }
 
@@ -210,6 +211,7 @@ namespace ZTP.ViewModel
             AddReffereCommand = new RelayCommand(AddReffere);
             RemoveReffereCommand = new RelayCommand(RemoveReffere);
             EditMatchCommand = new RelayCommand(EditMatch);
+            ReleaseRefereesCommand = new RelayCommand(ReleaseReferees);
             SaveData = new RelayCommand(Save);
             LoadData = new RelayCommand(Load);
 
@@ -222,12 +224,15 @@ namespace ZTP.ViewModel
 
         }
 
-
         #region Referee
 
         private void RemoveReffere(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano sedziego");
+                return;
+            }
             var values = (RefereeView)parameter;
             long idToRemove = values.ID;
             Referee refereeToRemove = reffere.Where(x => x.ID == idToRemove).FirstOrDefault();
@@ -237,9 +242,25 @@ namespace ZTP.ViewModel
 
         private void AddReffere(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
             var values = (object[])parameter;
-            double salary = double.Parse((string)values[2].ToString());
+            double n;
+            double salary = 0;
+            bool isNumeric = double.TryParse((string)values[2].ToString(), out n);
+            if (isNumeric)
+            {
+                salary = double.Parse((string)values[2].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+            
             string role = (string)values[3].ToString();
             Referee r = null;
             switch (role)
@@ -323,7 +344,8 @@ namespace ZTP.ViewModel
                     LastName = item.LastName,
                     IsBusy = item.IsBusy,
                     Role = item.Role,
-                    Salary = item.Salary
+                    Salary = item.Salary,
+                    MatchID=item.MatchID
                 });
             }
         }
@@ -345,7 +367,8 @@ namespace ZTP.ViewModel
                                 LastName = item.LastName,
                                 IsBusy = item.IsBusy,
                                 Role = item.Role,
-                                Salary = item.Salary
+                                Salary = item.Salary,
+                                MatchID=item.MatchID
                             };
                             break;
                         }
@@ -358,7 +381,8 @@ namespace ZTP.ViewModel
                                 LastName = item.LastName,
                                 IsBusy = item.IsBusy,
                                 Role = item.Role,
-                                Salary = item.Salary
+                                Salary = item.Salary,
+                                MatchID = item.MatchID
                             };
                             break;
                         }
@@ -371,7 +395,8 @@ namespace ZTP.ViewModel
                                 LastName = item.LastName,
                                 IsBusy = item.IsBusy,
                                 Role = item.Role,
-                                Salary = item.Salary
+                                Salary = item.Salary,
+                                MatchID = item.MatchID
                             };
                             break;
                         }
@@ -384,7 +409,8 @@ namespace ZTP.ViewModel
                                 LastName = item.LastName,
                                 IsBusy = item.IsBusy,
                                 Role = item.Role,
-                                Salary = item.Salary
+                                Salary = item.Salary,
+                                MatchID = item.MatchID
                             };
                             break;
                         }
@@ -394,13 +420,43 @@ namespace ZTP.ViewModel
             }
         }
 
+        private void ReleaseReferees(object parameter)
+        {
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano meczu");
+                return;
+            }
+            var values = (Match)parameter;
+            foreach (var item in reffere.Where(x=>x.MatchID==values.ID))
+            {
+                item.IsBusy = false;
+                item.MatchID = 0;
+            }
+            UpdatRefereeGrid();
+        }
+
+        private void ReleaseRefereesAfterRemoveMatch(Match match)
+        {
+            foreach (var item in reffere.Where(x => x.MatchID == match.ID))
+            {
+                item.IsBusy = false;
+                item.MatchID = 0;
+            }
+            UpdatRefereeGrid();
+        }
+
         #endregion
 
         #region Match
 
         private void EditMatch(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano meczu");
+                return;
+            }
             var values = (Match)parameter;
             DateTime? newDate = new DateTime();
             newDate = DateTime.Now;
@@ -414,15 +470,25 @@ namespace ZTP.ViewModel
 
         private void RemoveMatch(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano meczu");
+                return;
+            }
             var values = (Match)parameter;
             match.Remove(values);
             RemoveAllTickerByMattchID(values.ID);
+
+            ReleaseRefereesAfterRemoveMatch(values);
         }
 
         private void AddMatch(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
             var values = (object[])parameter;
             string stadionName = values[0].ToString();
             string hostName = values[1].ToString();
@@ -441,13 +507,20 @@ namespace ZTP.ViewModel
                 GuestGoals = guestGoals,
                 Date = date
             };
-            GetRefereeForMatch(m);
-            match.Add(m);
+            if (CheckIfRefereeExists() && GetRefereeForMatch(m))
+            {
+                match.Add(m);
+            }
+            else
+            {
+                ShowInfoWindow("Brak wolnych sędziów");
+            }
             UpdatRefereeGrid();
         }
 
-        private void GetRefereeForMatch(Match match)
+        private bool GetRefereeForMatch(Match match)
         {
+            int count = 0;
             List<RefereeType> neededReferee = new List<RefereeType>
             {
                 RefereeType.Main,
@@ -457,8 +530,23 @@ namespace ZTP.ViewModel
             };
             foreach (var item in neededReferee)
             {
-                reffere.FirstOrDefault().TakePart(item, match);
+                reffere.FirstOrDefault().TakePart(item, match, ref count);
             }
+            if (count!=4)
+            {
+                ReleaseRefereesAfterRemoveMatch(match);
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckIfRefereeExists()
+        {
+            if (!reffere.Any())
+            {
+                return false;
+            }
+            return true;
         }
 
         #endregion
@@ -478,7 +566,11 @@ namespace ZTP.ViewModel
 
         private void RemoveTicket(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano biletu");
+                return;
+            }
             var values = (Ticket)parameter;
             ticket.Remove(values);
             match.Where(x => x.ID == values.MatchID).FirstOrDefault().Detach(values);
@@ -486,7 +578,11 @@ namespace ZTP.ViewModel
 
         private void AddTicket(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
             var values = (object[])parameter;
             int matchID = Int32.Parse(values[0].ToString());
             string PESEL = values[1].ToString();
@@ -508,14 +604,22 @@ namespace ZTP.ViewModel
 
         private void RemoveClub(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano klubu");
+                return;
+            }
             var values = (Club)parameter;
             club.Remove(values);
         }
 
         private void AddClub(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
             var values = (object[])parameter;
             Club c=new Club{
                 ID=Helpers.FindMaxValue(club,x=>x.ID)+1,
@@ -532,14 +636,22 @@ namespace ZTP.ViewModel
 
         private void RemoveStadium(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano stadionu");
+                return;
+            }
             var values = (Stadium)parameter;
             stadium.Remove(values);
         }
 
         private void AddStadium(object parameter)
         {
-            if (parameter == null) return;
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
             var values = (object[])parameter;
             Stadium s = new Stadium
             {
@@ -698,6 +810,46 @@ namespace ZTP.ViewModel
         }
 
         #endregion
+
+        #endregion
+
+        #region Other
+
+        public void ShowInfoWindow(string info)
+        {
+            InfoWindow infoWindow = new InfoWindow(info);
+            infoWindow.ShowDialog();
+        }
+
+        public bool ValidateParams(object parameter)
+        {
+            if (parameter == null)
+            {
+                return false;
+            }
+            var values = (object[])parameter;
+            foreach (var item in values)
+            {
+                if (item==null)
+                {
+                    return false;
+                }
+                if (item as String == string.Empty)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool ValidateParamsAsObject(object parameter)
+        {
+            if (parameter == null)
+            {
+                return false;
+            }
+            return true;
+        }
 
         #endregion
     }

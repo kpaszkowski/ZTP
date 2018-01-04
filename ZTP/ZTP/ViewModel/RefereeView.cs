@@ -100,7 +100,22 @@ namespace ZTP.ViewModel
                 }
             }
         }
-
+        long _MatchID;
+        public long MatchID
+        {
+            get
+            {
+                return _MatchID;
+            }
+            set
+            {
+                if (_MatchID != value)
+                {
+                    _MatchID = value;
+                    RaisePropertyChanged("MatchID");
+                }
+            }
+        }
         void RaisePropertyChanged(string prop)
         {
             if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }

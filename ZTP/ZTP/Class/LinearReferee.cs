@@ -9,7 +9,7 @@ namespace ZTP.Class
 {
     class LinearReferee : Referee
     {
-        public override void TakePart(RefereeType refereeType,Match match)
+        public override void TakePart(RefereeType refereeType,Match match, ref int count)
         {
             if (!IsBusy)
             {
@@ -17,20 +17,24 @@ namespace ZTP.Class
                 {
                     match.LinearReffere = this.LastName;
                     this.IsBusy = true;
+                    this.MatchID = match.ID;
+                    count++;
                 }
                 else if (refereeType == RefereeType.Observer)
                 {
                     match.ObserverReffere = this.LastName;
                     this.IsBusy = true;
+                    this.MatchID = match.ID;
+                    count++;
                 }
                 else if (next != null)
                 {
-                    next.TakePart(refereeType,match);
+                    next.TakePart(refereeType,match, ref count);
                 }
             }
             else if (next != null)
             {
-                next.TakePart(refereeType,match);
+                next.TakePart(refereeType,match, ref count);
             }
         }
     }

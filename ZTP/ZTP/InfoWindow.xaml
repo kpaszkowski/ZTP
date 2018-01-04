@@ -7,8 +7,12 @@
         mc:Ignorable="d"
         Title="InfoWindow" Height="300" Width="300">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="109,186,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Label Name="LabelInfo" Content="Label" HorizontalAlignment="Left" Margin="97,83,0,0" VerticalAlignment="Top" Height="25" Width="94"/>
+        <StackPanel>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Label x:Name="LabelInfo" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </ScrollViewer>
+            <Button Content="Close" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
 
+        </StackPanel>
     </Grid>
 </Window>

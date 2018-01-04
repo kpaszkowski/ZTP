@@ -9,7 +9,7 @@ namespace ZTP.Class
 {
     class TechnicalReferee : Referee
     {
-        public override void TakePart(RefereeType refereeType,Match match)
+        public override void TakePart(RefereeType refereeType,Match match, ref int count)
         {
             if (!IsBusy)
             {
@@ -17,15 +17,17 @@ namespace ZTP.Class
                 {
                     match.TechnicalReffere = this.LastName;
                     this.IsBusy = true;
+                    this.MatchID = match.ID;
+                    count++;
                 }
                 else if (next != null)
                 {
-                    next.TakePart(refereeType,match);
+                    next.TakePart(refereeType,match, ref count);
                 }
             }
             else if (next != null)
             {
-                next.TakePart(refereeType,match);
+                next.TakePart(refereeType,match, ref count);
             }
         }
     }
