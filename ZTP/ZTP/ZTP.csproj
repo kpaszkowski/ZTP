@@ -54,15 +54,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Class\LinearReferee.cs" />
+    <Compile Include="Class\MainReferee.cs" />
+    <Compile Include="Class\ObserverReferee.cs" />
+    <Compile Include="Class\TechnicalReferee.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converter\Converter.cs" />
+    <Compile Include="Helper\Helpers.cs" />
+    <Compile Include="InfoWindow.xaml.cs">
+      <DependentUpon>InfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IObservable.cs" />
+    <Compile Include="Interfaces\IObserver.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\Club.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Match.cs" />
-    <Compile Include="ViewModel\Reffere.cs" />
+    <Compile Include="ViewModel\Referee.cs" />
+    <Compile Include="ViewModel\RefereeView.cs" />
     <Compile Include="ViewModel\Stadium.cs" />
     <Compile Include="ViewModel\Ticket.cs" />
+    <Page Include="InfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

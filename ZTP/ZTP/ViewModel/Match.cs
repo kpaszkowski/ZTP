@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using ZTP.Interfaces;
 
 namespace ZTP.ViewModel
 {
-    public class Match : INotifyPropertyChanged
+    public class Match : INotifyPropertyChanged ,IObservable
     {
         #region Properties
         long _ID;
@@ -166,8 +168,8 @@ namespace ZTP.ViewModel
                 }
             }
         }
-        DateTime _date;
-        public DateTime Date
+        Nullable<DateTime> _date;
+        public Nullable<DateTime> Date
         {
             get
             {
@@ -184,10 +186,31 @@ namespace ZTP.ViewModel
         }
         #endregion
 
+        List<Ticket> ticketList = new List<Ticket>();
+
+        public void Attach(Ticket ticket)
+        {
+            ticketList.Add(ticket);
+        }
+
+        public void Detach(Ticket ticket)
+        {
+            ticketList.Remove(ticket);
+        }
+
+        public void Notify(Nullable<DateTime> dateTime)
+        {
+            foreach (Ticket item in ticketList)
+            {
+                item.Update(this.Date);
+            }
+        }
+
         void RaisePropertyChanged(string prop)
         {
             if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

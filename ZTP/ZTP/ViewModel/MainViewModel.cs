@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using ZTP.Class;
 using ZTP.Commands;
+using ZTP.Helper;
 
 namespace ZTP.ViewModel
 {
+    enum RefereeType
+    {
+        Main,
+        Technical,
+        Linear,
+        Observer,
+    }
     public class MainViewModel : BaseViewModel
     {
         #region Fields
@@ -16,7 +27,8 @@ namespace ZTP.ViewModel
         public ObservableCollection<Club> club { get; set; }
         public ObservableCollection<Ticket> ticket { get; set; }
         public ObservableCollection<Match> match { get; set; }
-        public ObservableCollection<Reffere> reffere { get; set; }
+        public ObservableCollection<RefereeView> refereeView { get; set; }
+        List<Referee> reffere { get; set; }
         object _SelectedStadium;
         public object SelectedStadium
         {
@@ -172,6 +184,7 @@ namespace ZTP.ViewModel
         public RelayCommand RemoveClubCommand { get; set; }
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
+        public RelayCommand EditMatchCommand { get; set; }
 
         #endregion
 
@@ -179,6 +192,7 @@ namespace ZTP.ViewModel
         {
             InitializeCommands();
         }
+
         private void InitializeCommands()
         {
             AddStadiumCommand = new RelayCommand(AddStadium);
@@ -191,21 +205,28 @@ namespace ZTP.ViewModel
             RemoveMatchCommand = new RelayCommand(RemoveMatch);
             AddReffereCommand = new RelayCommand(AddReffere);
             RemoveReffereCommand = new RelayCommand(RemoveReffere);
+            EditMatchCommand = new RelayCommand(EditMatch);
 
             stadium = new ObservableCollection<Stadium>();
             club = new ObservableCollection<Club>();
             match = new ObservableCollection<Match>();
             ticket = new ObservableCollection<Ticket>();
-            reffere = new ObservableCollection<Reffere>();
+            refereeView = new ObservableCollection<RefereeView>();
+            reffere = new List<Referee>();
 
         }
+
 
         #region Referee
 
         private void RemoveReffere(object parameter)
         {
             if (parameter == null) return;
-            var values = (Reffere)parameter;
+            var values = (RefereeView)parameter;
+            long idToRemove = values.ID;
+            Referee refereeToRemove = reffere.Where(x => x.ID == idToRemove).FirstOrDefault();
+            reffere.Remove(refereeToRemove);
+            UpdatRefereeGrid();
         }
 
         private void AddReffere(object parameter)
@@ -214,16 +235,112 @@ namespace ZTP.ViewModel
             var values = (object[])parameter;
             double salary = double.Parse((string)values[2].ToString());
             string role = (string)values[3].ToString();
+            Referee r = null;
+            switch (role)
+            {
+                case "Main":
+                    {
+                        r = new MainReferee
+                        {
+                            ID = Helpers.FindMaxValue(reffere, x => x.ID) + 1,
+                            FirstName = values[0].ToString(),
+                            LastName = values[1].ToString(),
+                            IsBusy = false,
+                            Salary = salary,
+                            Role = role
+                        };
+                        break;
+                    }
+                case "Technical":
+                    {
+                        r = new TechnicalReferee
+                        {
+                            ID = Helpers.FindMaxValue(reffere, x => x.ID) + 1,
+                            FirstName = values[0].ToString(),
+                            LastName = values[1].ToString(),
+                            IsBusy = false,
+                            Salary = salary,
+                            Role = role
+                        };
+                        break;
+                    }
+                case "Linear":
+                    {
+                        r = new LinearReferee
+                        {
+                            ID = Helpers.FindMaxValue(reffere, x => x.ID) + 1,
+                            FirstName = values[0].ToString(),
+                            LastName = values[1].ToString(),
+                            IsBusy = false,
+                            Salary = salary,
+                            Role = role
+                        };
+                        break;
+                    }
+                case "Observer":
+                    {
+                        r = new ObserverReferee
+                        {
+                            ID = Helpers.FindMaxValue(reffere, x => x.ID) + 1,
+                            FirstName = values[0].ToString(),
+                            LastName = values[1].ToString(),
+                            IsBusy = false,
+                            Salary = salary,
+                            Role = role
+                        };
+                        break;
+                    }
+            }
+            long lastRefereeID = Helpers.FindMaxValue(reffere, x => x.ID);
+            foreach (Referee item in reffere.Where(x=>x.ID==lastRefereeID))
+            {
+                item.SetNextReferee(r);
+            }
+            reffere.Add(r);
+            UpdatRefereeGrid();
+        }
+
+        public void UpdatRefereeGrid()
+        {
+            refereeView.Clear();
+            foreach (Referee item in reffere)
+            {
+                refereeView.Add(new RefereeView
+                {
+                    ID = item.ID,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    IsBusy = item.IsBusy,
+                    Role = item.Role,
+                    Salary = item.Salary
+                });
+            }
         }
 
         #endregion
 
         #region Match
 
+        private void EditMatch(object parameter)
+        {
+            if (parameter == null) return;
+            var values = (Match)parameter;
+            DateTime? newDate = new DateTime();
+            newDate = DateTime.Now;
+            foreach (Match item in match.Where(x=>x.ID==values.ID))
+            {
+                item.Date = newDate;
+            }
+            values.Notify(newDate);
+            
+        }
+
         private void RemoveMatch(object parameter)
         {
             if (parameter == null) return;
             var values = (Match)parameter;
+            match.Remove(values);
+            RemoveAllTickerByMattchID(values.ID);
         }
 
         private void AddMatch(object parameter)
@@ -233,23 +350,61 @@ namespace ZTP.ViewModel
             string stadionName = values[0].ToString();
             string hostName = values[1].ToString();
             string guestName = values[2].ToString();
-            string mainReffere = values[3].ToString();
-            string technicalReffere = values[4].ToString();
-            string linearReffere = values[5].ToString();
-            string observerReffere = values[6].ToString();
-            int hostGoals = Int32.Parse((string)values[7].ToString());
-            int guestGoals = Int32.Parse((string)values[8].ToString());
-            var date = (Nullable<DateTime>)values[9];
+            int hostGoals = Int32.Parse((string)values[3].ToString());
+            int guestGoals = Int32.Parse((string)values[4].ToString());
+            var date = (Nullable<DateTime>)values[5];
+
+            Match m = new Match
+            {
+                ID = Helpers.FindMaxValue(match, x => x.ID) + 1,
+                Stadium_Name = stadionName,
+                Host_Name = hostName,
+                Guest_Name = guestName,
+                HostGoals = hostGoals,
+                GuestGoals = guestGoals,
+                Date = date
+            };
+            GetRefereeForMatch(m);
+            match.Add(m);
+            UpdatRefereeGrid();
+        }
+
+        private void GetRefereeForMatch(Match match)
+        {
+            List<RefereeType> neededReferee = new List<RefereeType>
+            {
+                RefereeType.Main,
+                RefereeType.Technical,
+                RefereeType.Linear,
+                RefereeType.Observer
+            };
+            foreach (var item in neededReferee)
+            {
+                reffere.FirstOrDefault().TakePart(item, match);
+            }
         }
 
         #endregion
 
         #region Ticket
 
+        private void RemoveAllTickerByMattchID(long matchID)
+        {
+            List<Ticket> ticketToRemoveList = new List<Ticket>();
+            ticketToRemoveList = ticket.Where(x => x.MatchID == matchID).ToList();
+            foreach (Ticket item in ticketToRemoveList)
+            {
+                ticket.Remove(item);
+                //match.Where(x => x.ID == matchID).FirstOrDefault().Detach(item);
+            }
+        }
+
         private void RemoveTicket(object parameter)
         {
             if (parameter == null) return;
             var values = (Ticket)parameter;
+            ticket.Remove(values);
+            match.Where(x => x.ID == values.MatchID).FirstOrDefault().Detach(values);
         }
 
         private void AddTicket(object parameter)
@@ -258,6 +413,16 @@ namespace ZTP.ViewModel
             var values = (object[])parameter;
             int matchID = Int32.Parse(values[0].ToString());
             string PESEL = values[1].ToString();
+            Ticket t = new Ticket
+            {
+                ID = Helpers.FindMaxValue(ticket, x => x.ID) + 1,
+                Date = match.Where(x => x.ID == matchID).Select(x => x.Date).FirstOrDefault(),
+                PESEL = PESEL,
+                MatchID=matchID
+            };
+            ticket.Add(t);
+            match.Where(x => x.ID == matchID).FirstOrDefault().Attach(t);
+
         }
 
         #endregion
@@ -268,12 +433,20 @@ namespace ZTP.ViewModel
         {
             if (parameter == null) return;
             var values = (Club)parameter;
+            club.Remove(values);
         }
 
         private void AddClub(object parameter)
         {
             if (parameter == null) return;
             var values = (object[])parameter;
+            Club c=new Club{
+                ID=Helpers.FindMaxValue(club,x=>x.ID)+1,
+                Name=values[0].ToString(),
+                Stadium_Name=values[1].ToString()
+            };
+            club.Add(c);
+
         }
 
         #endregion
@@ -284,6 +457,7 @@ namespace ZTP.ViewModel
         {
             if (parameter == null) return;
             var values = (Stadium)parameter;
+            stadium.Remove(values);
         }
 
         private void AddStadium(object parameter)
@@ -292,10 +466,12 @@ namespace ZTP.ViewModel
             var values = (object[])parameter;
             Stadium s = new Stadium
             {
+                ID= Helpers.FindMaxValue(stadium, x => x.ID)+1,
                 Name = values[0].ToString(),
                 City = values[1].ToString(),
                 Country = values[2].ToString()
             };
+            stadium.Add(s);
         }
 
         #endregion

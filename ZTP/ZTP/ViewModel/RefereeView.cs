@@ -2,7 +2,7 @@
 
 namespace ZTP.ViewModel
 {
-    public class Reffere : INotifyPropertyChanged
+    public class RefereeView
     {
         long _ID;
         public long ID

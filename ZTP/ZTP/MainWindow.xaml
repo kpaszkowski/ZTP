@@ -62,10 +62,10 @@
                         <ComboBox Name="cbStadiumMatch" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" DisplayMemberPath="Name"/>
                         <ComboBox Name="cbHostClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub}" DisplayMemberPath="Name"/>
                         <ComboBox Name="cbGuestClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub2}" DisplayMemberPath="Name"/>
-                        <ComboBox Name="cbMainReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}" DisplayMemberPath="LastName"/>
+                        <!--<ComboBox Name="cbMainReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}" DisplayMemberPath="LastName"/>
                         <ComboBox Name="cbTechnicalReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere2}" DisplayMemberPath="LastName"/>
                         <ComboBox Name="cbLinearReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere3}" DisplayMemberPath="LastName"/>
-                        <ComboBox Name="cbObserverReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere4}" DisplayMemberPath="LastName"/>
+                        <ComboBox Name="cbObserverReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere4}" DisplayMemberPath="LastName"/>-->
                         <TextBox Name="tbHostGoals" Text="3"/>
                         <TextBox Name="tbGuestGoals" Text="1"/>
                         <DatePicker x:Name="dpDateMatch" SelectedDateFormat="Long" SelectedDate="{Binding MyDateTimeProperty2, Mode=TwoWay}" ></DatePicker>
@@ -75,10 +75,10 @@
                                     <Binding Path="Text" ElementName="cbStadiumMatch"/>
                                     <Binding Path="Text" ElementName="cbHostClub"/>
                                     <Binding Path="Text" ElementName="cbGuestClub"/>
-                                    <Binding Path="Text" ElementName="cbMainReffere"/>
+                                    <!--<Binding Path="Text" ElementName="cbMainReffere"/>
                                     <Binding Path="Text" ElementName="cbTechnicalReffere"/>
                                     <Binding Path="Text" ElementName="cbLinearReffere"/>
-                                    <Binding Path="Text" ElementName="cbObserverReffere"/>
+                                    <Binding Path="Text" ElementName="cbObserverReffere"/>-->
                                     <Binding Path="Text" ElementName="tbHostGoals"/>
                                     <Binding Path="Text" ElementName="tbGuestGoals"/>
                                     <Binding Path="SelectedDate" ElementName="dpDateMatch"/>
@@ -86,6 +86,7 @@
                             </Button.CommandParameter>
                         </Button>
                         <Button Content="Usuń mecz" Command="{Binding RemoveMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
+                        <Button Content="Edytuj mecz" Command="{Binding EditMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
                         <ScrollViewer>
                             <DataGrid IsReadOnly="True" ItemsSource="{Binding match}" SelectedItem="{Binding SelectedMatch}"/>
                         </ScrollViewer>
@@ -116,20 +117,25 @@
                         <TextBox Name="tbReffereFirstName" Text="ReffereFirstName"/>
                         <TextBox Name="tbReffereLastName" Text="ReffereLastName"/>
                         <TextBox Name="tbReffereSalaryName" Text="5000"/>
-                        <TextBox Name="tbReffereRole" Text="Main"/>
+                        <ComboBox Name="cbRefereeRole">
+                            <ComboBoxItem Name="cbi1">Main</ComboBoxItem>
+                            <ComboBoxItem Name="cbi2">Technical</ComboBoxItem>
+                            <ComboBoxItem Name="cbi3">Linear</ComboBoxItem>
+                            <ComboBoxItem Name="cbi4">Observer</ComboBoxItem>
+                        </ComboBox>
                         <Button Content="Dodaj Sedziego" Command="{Binding AddReffereCommand}">
                             <Button.CommandParameter>
                                 <MultiBinding Converter="{StaticResource Converter}">
                                     <Binding Path="Text" ElementName="tbReffereFirstName"/>
                                     <Binding Path="Text" ElementName="tbReffereLastName"/>
                                     <Binding Path="Text" ElementName="tbReffereSalaryName"/>
-                                    <Binding Path="Text" ElementName="tbReffereRole"/>
+                                    <Binding Path="Text" ElementName="cbRefereeRole"/>
                                 </MultiBinding>
                             </Button.CommandParameter>
                         </Button>
                         <Button Content="Usuń sędziego" Command="{Binding RemoveReffereCommand}" CommandParameter="{Binding SelectedReffere}"/>
                         <ScrollViewer>
-                            <DataGrid IsReadOnly="True" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}"/>
+                            <DataGrid IsReadOnly="True" ItemsSource="{Binding refereeView}" SelectedItem="{Binding SelectedReffere}"/>
                         </ScrollViewer>
                     </StackPanel>
                 </DockPanel>
