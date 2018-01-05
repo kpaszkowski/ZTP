@@ -54,6 +54,23 @@ namespace ZTP.ViewModel
             }
         }
 
+        long _StadiumID;
+        public long StadiumID
+        {
+            get
+            {
+                return _StadiumID;
+            }
+            set
+            {
+                if (_StadiumID != value)
+                {
+                    _StadiumID = value;
+                    RaisePropertyChanged("StadiumID");
+                }
+            }
+        }
+
         void RaisePropertyChanged(string prop)
         {
             if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }

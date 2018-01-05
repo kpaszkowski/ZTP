@@ -453,19 +453,19 @@ namespace ZTP.ViewModel
 
         private void EditMatch(object parameter)
         {
-            if (!ValidateParamsAsObject(parameter))
+            if (!ValidateParams(parameter))
             {
-                ShowInfoWindow("Nie wybrano meczu");
+                ShowInfoWindow("Wypełnij pola poprawnie");
                 return;
             }
-            var values = (Match)parameter;
-            DateTime? newDate = new DateTime();
-            newDate = DateTime.Now;
-            foreach (Match item in match.Where(x=>x.ID==values.ID))
+            var values = (object[])parameter;
+            var selectedMatch = (Match)values[0];
+            var newDate = (Nullable<DateTime>)values[1];
+            foreach (Match item in match.Where(x=>x.ID== selectedMatch.ID))
             {
                 item.Date = newDate;
             }
-            values.Notify(newDate);
+            selectedMatch.Notify(newDate);
             
         }
 
@@ -622,10 +622,12 @@ namespace ZTP.ViewModel
                 return;
             }
             var values = (object[])parameter;
+            Stadium stadium = (Stadium)values[1];
             Club c=new Club{
                 ID=Helpers.FindMaxValue(club,x=>x.ID)+1,
                 Name=values[0].ToString(),
-                Stadium_Name=values[1].ToString()
+                StadiumID=stadium.ID,
+                Stadium_Name=stadium.Name
             };
             club.Add(c);
 
