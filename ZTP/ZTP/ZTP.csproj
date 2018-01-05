@@ -73,13 +73,17 @@
     <Compile Include="ViewModel\AssistantCreator.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\Club.cs" />
+    <Compile Include="ViewModel\ClubComponent.cs" />
     <Compile Include="ViewModel\Coach.cs" />
     <Compile Include="ViewModel\CoachCreator.cs" />
     <Compile Include="ViewModel\HistoricalRecords.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Match.cs" />
+    <Compile Include="ViewModel\MatchPanel.cs" />
     <Compile Include="ViewModel\Physiotherapist.cs" />
     <Compile Include="ViewModel\PhysiotherapistCreator.cs" />
+    <Compile Include="ViewModel\Player.cs" />
+    <Compile Include="ViewModel\Record.cs" />
     <Compile Include="ViewModel\Referee.cs" />
     <Compile Include="ViewModel\RefereeView.cs" />
     <Compile Include="ViewModel\Scout.cs" />

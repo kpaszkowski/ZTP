@@ -1,11 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace ZTP.ViewModel
 {
-    public class Club : INotifyPropertyChanged
+    public class Club : ClubComponent, INotifyPropertyChanged
     {
-        int _ID;
-        public int ID
+        
+        public long ID
         {
             get
             {
@@ -20,7 +25,7 @@ namespace ZTP.ViewModel
                 }
             }
         }
-        string _Name;
+        //string _Name;
         public string Name
         {
             get
@@ -53,6 +58,42 @@ namespace ZTP.ViewModel
                 }
             }
         }
+
+        List<Player> players = new List<Player>();
+        List<StaffMember> staffMembers = new List<StaffMember>();
+        List<Record> records = new List<Record>();
+
+        void AddPlayer(Player player)
+        {
+            players.Add(player);
+        }
+
+        void RemovePlayer(Player player)
+        {
+            players.Remove(player);
+        }
+
+        void AddStaffMember(StaffMember sm)
+        {
+            staffMembers.Add(sm);
+        }
+
+        void RemoveStaffMember(StaffMember sm)
+        {
+            staffMembers.Remove(sm);
+        }
+
+        void AddRecord(Record record)
+        {
+            records.Add(record);
+        }
+
+        void RemoveRecord(Record record)
+        {
+            records.Remove(record);
+        }
+
+
 
         void RaisePropertyChanged(string prop)
         {
