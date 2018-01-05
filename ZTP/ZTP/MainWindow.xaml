@@ -80,7 +80,15 @@
                             </Button.CommandParameter>
                         </Button>
                         <Button Content="Usuń mecz" Command="{Binding RemoveMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
-                        <Button Content="Edytuj mecz" Command="{Binding EditMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
+                        <DatePicker x:Name="dpEditDateMatch" SelectedDateFormat="Long" SelectedDate="{Binding MyDateTimeProperty2, Mode=TwoWay}" ></DatePicker>
+                        <Button Content="Edytuj mecz" Command="{Binding EditMatchCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource Converter}">
+                                    <Binding Path="SelectedMatch"/>
+                                    <Binding Path="SelectedDate" ElementName="dpEditDateMatch"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
                         <Button Content="Zwolnij sędziów" Command="{Binding ReleaseRefereesCommand}" CommandParameter="{Binding SelectedMatch}"/>
                         <ScrollViewer>
                             <DataGrid IsReadOnly="True" ItemsSource="{Binding match}" SelectedItem="{Binding SelectedMatch}"/>
