@@ -13,7 +13,7 @@
         <!--     <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>-->
         <local2:Converter x:Key="Converter"></local2:Converter>
     </Window.Resources>
-    
+
     <Grid>
         <TabControl RenderTransformOrigin="0.497,0.889" HorizontalAlignment="Right" Width="517">
             <TabControl.Resources>
@@ -31,12 +31,12 @@
                     <StackPanel>
                         <Button Name="AddStadium" HorizontalAlignment="Left" Content="Dodaj stadion"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="AddStadium_Click"/>
                         <Button Name="EditStadium" HorizontalAlignment="Left" Content="Edytuj stadion"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
-                        <Button Name="DeleteStadium" HorizontalAlignment="Left" Content="Usuń stadion"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
+                        <Button Name="DeleteStadium" HorizontalAlignment="Left" Content="Usuń stadion"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False" Command="{Binding RemoveStadiumCommand}" CommandParameter="{Binding SelectedStadium}"/>
 
                     </StackPanel>
                     <StackPanel>
                         <ScrollViewer HorizontalAlignment="Right" Width="258">
-                            <DataGrid  IsReadOnly="True" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedStadium}" Width="244" Height="289" Background="Transparent"/>
+                            <DataGrid  IsReadOnly="True" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" Width="244" Height="289" Background="Transparent"/>
                         </ScrollViewer>
 
                     </StackPanel>
@@ -48,7 +48,7 @@
                     <StackPanel>
                         <Button Name="AddClub" HorizontalAlignment="Left" Content="Dodaj klub"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="AddClub_Click"/>
                         <Button Name="EditClub" HorizontalAlignment="Left" Content="Edytuj klub"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
-                        <Button Name="DeleteClub" HorizontalAlignment="Left" Content="Usuń klub"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
+                        <Button Name="DeleteClub" HorizontalAlignment="Left" Content="Usuń klub"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False" Command="{Binding RemoveClubCommand}" CommandParameter="{Binding SelectedClub}"/>
                         <Button x:Name="HistoryClub" VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Historia klubu"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
                     </StackPanel>
                     <StackPanel>
@@ -62,4 +62,3 @@
         </TabControl>
     </Grid>
 </Window>
-

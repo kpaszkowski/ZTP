@@ -7,10 +7,11 @@
         xmlns:local1="clr-namespace:Football.ViewModel.Window"
         xmlns:local2="clr-namespace:Football.Converter"
         mc:Ignorable="d"
-        Title="Panel administracyjny - Sędzowie" Height="350" Width="525">
+        Title="Panel administracyjny - Sędzowie" Height="350" Width="525"
+        DataContext="{DynamicResource MainViewModel}">
 
     <Window.Resources>
-        <!--     <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>-->
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
         <local2:Converter x:Key="Converter"></local2:Converter>
         
     </Window.Resources>
@@ -20,37 +21,24 @@
     </Window.Background>
 
     <Grid>
-        <!--<TabControl RenderTransformOrigin="0.497,0.889" HorizontalAlignment="Right" Width="517" SelectionChanged="TabControl_SelectionChanged">-->
-            <!--<TabControl.Resources>
-                <Style TargetType="{x:Type TabControl}">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <ImageBrush ImageSource="Assets\background.jpg"/>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>-->
+
            
                 <DockPanel>
                     <!--referees-->
                     <StackPanel>
                         <Button Name="AddReferee" HorizontalAlignment="Left" Content="Dodaj sędziego"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="AddReferee_Click"/>
                         <Button Name="EditReferee" HorizontalAlignment="Left" Content="Edytuj sędziego"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
-                        <Button Name="DeleteReferee" HorizontalAlignment="Left" Content="Usuń sędziego"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
+                <Button Name="DeleteReferee" HorizontalAlignment="Left" Content="Usuń sędziego"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False" Command="{Binding RemoveReffereCommand}" CommandParameter="{Binding SelectedReffere}"/>
 
                     </StackPanel>
                     <StackPanel>
                         <ScrollViewer HorizontalAlignment="Right" Width="258">
-                            <DataGrid  IsReadOnly="True" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedReferee}" Width="244" Height="289" Background="Transparent"/>
-                        </ScrollViewer>
+                    <DataGrid IsReadOnly="True" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}"/>
+                </ScrollViewer>
 
                     </StackPanel>
                 </DockPanel>
-            
-
-   
-      
-        <!--</TabControl>-->
+           
     </Grid>
 </Window>
 

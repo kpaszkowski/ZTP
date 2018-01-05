@@ -3,9 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Football"
+                xmlns:local="clr-namespace:Football"
+        xmlns:local1="clr-namespace:Football.ViewModel.Window"
+        xmlns:local2="clr-namespace:Football.Converter"
         mc:Ignorable="d"
-        Title="Stadiony" Height="250" Width="300">
+        Title="Stadiony" Height="250" Width="300"
+        DataContext="{DynamicResource MainViewModel}">
+    <Window.Resources>
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
+        <local2:Converter x:Key="Converter"></local2:Converter>
+    </Window.Resources>
+
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
             <GradientStop Color="DarkBlue" Offset="1"/>
@@ -37,7 +45,16 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Ok"  Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Right" Click="Button_OK"></Button>
+            <Button Grid.Column="0" Content="Ok"  Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Right" >
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource Converter}">
+                        <Binding Path="Text" ElementName="TextBox_nazwa"/>
+                        <Binding Path="Text" ElementName="TextBox_miasto"/>
+                        <Binding Path="Text" ElementName="TextBox_kraj"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+
             <Button Grid.Column="1" Content="Anuluj" Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Left" Click="Button_Cancel"></Button>
 
         </Grid>

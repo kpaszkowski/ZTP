@@ -10,7 +10,7 @@
         Title="Panel administracyjny - Sezon" Height="350" Width="525">
 
     <Window.Resources>
-        <!--     <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>-->
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
         <local2:Converter x:Key="Converter"></local2:Converter>
 
     </Window.Resources>
@@ -27,7 +27,8 @@
             <StackPanel>
                 <Button Name="Generate" HorizontalAlignment="Left" Content="Generuj sezon"  Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="Generate_Click"/>
                 <Button Name="EditMatch" HorizontalAlignment="Left" Content="Edytuj mecz"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
-                <Button Name="Tickets" HorizontalAlignment="Left" Content="Zarządzaj biletami"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False"/>
+                <Button Name="DeleteMatch" HorizontalAlignment="Left" Content="Usuń mecz"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" IsEnabled="False" Command="{Binding RemoveMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
+                <Button Name="Tickets" HorizontalAlignment="Left" Content="Zarządzaj biletami"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5" Click="Ticket_Click"/>
                 <Button Name="Ladder" HorizontalAlignment="Left" Content="Zobacz drabinkę turniejową"   Height="41" Width="124"  FontWeight="Bold" Background="#FF5284C0" BorderBrush="#FFC1C0E8" Foreground ="White" FontSize="14.667"  FontFamily="Arial" Margin="10,5"/>
 
             </StackPanel>
@@ -39,10 +40,6 @@
             </StackPanel>
         </DockPanel>
 
-
-
-
-        <!--</TabControl>-->
     </Grid>
 </Window>
 

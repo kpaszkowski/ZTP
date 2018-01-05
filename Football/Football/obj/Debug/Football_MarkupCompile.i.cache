@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\App.xaml
-141287444468
+15566867932
 21750853300
-49-484659498
+501247541465
 18-388317281
-AddPlayer.xaml;AddStaff.xaml;AlertWindow.xaml;Clubs.xaml;ClubsAndStadions.xaml;ClubStaff.xaml;EditMatch.xaml;MainWindow.xaml;NewReferee.xaml;Referees.xaml;SearchPlayer.xaml;SearchStaff.xaml;Season.xaml;Stadiums.xaml;
+AddPlayer.xaml;AddStaff.xaml;AlertWindow.xaml;Clubs.xaml;ClubsAndStadions.xaml;ClubStaff.xaml;EditMatch.xaml;MainWindow.xaml;NewReferee.xaml;Referees.xaml;SearchPlayer.xaml;SearchStaff.xaml;Season.xaml;Stadiums.xaml;TicketManager.xaml;
 
-True
+False
 

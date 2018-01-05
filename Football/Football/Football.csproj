@@ -157,6 +157,9 @@
     <Compile Include="Stadiums.xaml.cs">
       <DependentUpon>Stadiums.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TicketManager.xaml.cs">
+      <DependentUpon>TicketManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ClubViewModel.cs" />
     <Compile Include="ViewModel\MatchViewModel.cs" />
     <Compile Include="ViewModel\ReffereViewModel.cs" />
@@ -237,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Stadiums.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TicketManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

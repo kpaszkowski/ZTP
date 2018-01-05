@@ -44,3 +44,5 @@ C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\obj\Debug\SearchPlaye
 C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\obj\Debug\SearchStaff.baml
 C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\obj\Debug\Season.baml
 C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\obj\Debug\EditMatch.baml
+C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\obj\Debug\TicketManager.g.cs
+C:\Users\GD\Desktop\ZTP\projekt\Football\Football\Football\obj\Debug\TicketManager.baml

@@ -28,5 +28,13 @@ namespace Football
         {
 
         }
+
+        private void Ticket_Click(object sender, RoutedEventArgs e)
+        {
+            TicketManager window = new TicketManager();
+            if (window.ShowDialog() == true)
+            {
+            }
+        }
     }
 }

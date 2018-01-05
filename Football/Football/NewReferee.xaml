@@ -4,8 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Football"
+                xmlns:local1="clr-namespace:Football.ViewModel.Window"
+        xmlns:local2="clr-namespace:Football.Converter"
         mc:Ignorable="d"
-        Title="Sędziowie" Height="260" Width="300">
+        Title="Sędziowie" Height="260" Width="300"
+        DataContext="{DynamicResource MainViewModel}">
+
+    <Window.Resources>
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
+        <local2:Converter x:Key="Converter"></local2:Converter>
+    </Window.Resources>
+
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
             <GradientStop Color="DarkBlue" Offset="1"/>
@@ -14,7 +23,7 @@
     </Window.Background>
 
     <DockPanel Margin="5">
-        <TextBlock DockPanel.Dock="Top" Text="Klub:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,5,0,0" Height="24" FontWeight="Bold"/>
+        <TextBlock DockPanel.Dock="Top" Text="Sędzia:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,5,0,0" Height="24" FontWeight="Bold"/>
 
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
@@ -24,12 +33,12 @@
             <StackPanel Grid.Column="0" Margin="3">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Imię:" Margin="5,10" Height="24" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Nazwisko:"   Margin="5,10" Height="24"  />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Miasto:" Margin="5,10" Height="24" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Zarobki:" Margin="5,10" Height="24" />
             </StackPanel>
             <StackPanel Margin="5" Grid.Column="1">
                 <TextBox Name="TextBox_imie" Height="24" Margin="5,10"/>
                 <TextBox Name="TextBox_nazwisko" Height="24" Margin="5,10"/>
-                <TextBox Name="TextBox_miasto" Height="24" Margin="5,10"/>
+                <TextBox Name="TextBox_zarobki" Height="24" Margin="5,10"/>
             </StackPanel>
         </Grid>
         <Grid DockPanel.Dock="Bottom">
@@ -37,7 +46,15 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Ok"  Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Right" Click="Button_OK"></Button>
+            <Button Grid.Column="0" Content="Ok"  Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Right" Command="{Binding AddReffereCommand}">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource Converter}">
+                        <Binding Path="Text" ElementName="TextBox_imie"/>
+                        <Binding Path="Text" ElementName="TextBox_nazwisko"/>
+                        <Binding Path="Text" ElementName="TextBox_zarobki"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
             <Button Grid.Column="1" Content="Anuluj" Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Left" Click="Button_Cancel"></Button>
 
         </Grid>

@@ -7,11 +7,11 @@
         xmlns:local1="clr-namespace:Football.ViewModel.Window"
         xmlns:local2="clr-namespace:Football.Converter"
         mc:Ignorable="d"
-        Title="Panel administracyjny" Height="350" Width="525">
-    <!-- DataContext="{DynamicResource MainViewModel}"-->
+        Title="Panel administracyjny" Height="350" Width="525"
+     DataContext="{DynamicResource MainViewModel}">
 
     <Window.Resources>
-        <!--     <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>-->
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
         <local2:Converter x:Key="Converter"></local2:Converter>
     </Window.Resources>
     <Window.Background>

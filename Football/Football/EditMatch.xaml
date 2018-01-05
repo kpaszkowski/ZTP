@@ -4,8 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Football"
+                xmlns:local1="clr-namespace:Football.ViewModel.Window"
+        xmlns:local2="clr-namespace:Football.Converter"
         mc:Ignorable="d"
-        Title="Edytuj mecz" Height="400" Width="300">
+        Title="Edytuj mecz" Height="450" Width="300"
+        DataContext="{DynamicResource MainViewModel}">
+
+    <Window.Resources>
+        <local1:MainViewModel x:Key="MainViewModel"></local1:MainViewModel>
+        <local2:Converter x:Key="Converter"></local2:Converter>
+
+    </Window.Resources>
+
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
             <GradientStop Color="DarkBlue" Offset="1"/>
@@ -22,20 +32,23 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="3">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Stadion:" Margin="5,10" Height="24" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Gospodarze:" Margin="5,10" Height="24" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Goście:"   Margin="5,10" Height="24"  />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Główny sędzia:" Margin="5,10" Height="24" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Liniowy sędzia:" Margin="5,10" Height="24" />
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Techniczny sędzia:" Margin="5,10" Height="24" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Sędzia główny:" Margin="5,10" Height="24" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Sędzia liniowy:" Margin="5,10" Height="24" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Sędzia techniczny:" Margin="5,10" Height="24" />
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Obserwator:" Margin="5,10" Height="24" />
             </StackPanel>
             <StackPanel Margin="5" Grid.Column="1">
-                <ComboBox Name="ComboBox_first_klub" Height="24" Margin="5,10"/>
-                <ComboBox Name="ComboBox_second_klub" Height="24" Margin="5,10"/>
-                <ComboBox Name="ComboBox_mref" Height="24" Margin="5,10"/>
-                <ComboBox Name="ComboBox_lref" Height="24" Margin="5,10"/>
-                <ComboBox Name="ComboBox_tref" Height="24" Margin="5,10"/>
-                <ComboBox Name="ComboBox_obsv" Height="24" Margin="5,10"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbStadiumMatch" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" DisplayMemberPath="Name"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbHostClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub}" DisplayMemberPath="Name"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbGuestClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub2}" DisplayMemberPath="Name"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbMainReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}" DisplayMemberPath="LastName"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbTechnicalReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere2}" DisplayMemberPath="LastName"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbLinearReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere3}" DisplayMemberPath="LastName"/>
+                <ComboBox Height="24" Margin="5,10" Name="cbObserverReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere4}" DisplayMemberPath="LastName"/>
+
             </StackPanel>
         </Grid>
         <Grid DockPanel.Dock="Bottom">
@@ -43,24 +56,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Ok"  Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Right" Click="Button_OK"></Button>
-            <Button Grid.Column="1" Content="Anuluj" Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Left" Click="Button_Cancel"></Button>
-
-        </Grid>
-    </DockPanel>
-</Window>
-
-
-<!--<ComboBox Name="cbStadiumMatch" ItemsSource="{Binding stadium}" SelectedItem="{Binding SelectedStadium}" DisplayMemberPath="Name" SelectionChanged="cbStadiumMatch_SelectionChanged"/>
-            <ComboBox Name="cbHostClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub}" DisplayMemberPath="Name"/>
-            <ComboBox Name="cbGuestClub" ItemsSource="{Binding club}" SelectedItem="{Binding SelectedClub2}" DisplayMemberPath="Name"/>
-            <ComboBox Name="cbMainReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere}" DisplayMemberPath="LastName"/>
-            <ComboBox Name="cbTechnicalReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere2}" DisplayMemberPath="LastName"/>
-            <ComboBox Name="cbLinearReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere3}" DisplayMemberPath="LastName"/>
-            <ComboBox Name="cbObserverReffere" ItemsSource="{Binding reffere}" SelectedItem="{Binding SelectedReffere4}" DisplayMemberPath="LastName"/>
-            <TextBox Name="tbHostGoals" Text="3"/>
-            <TextBox Name="tbGuestGoals" Text="1"/>
-            <Button Content="Dodaj Mecz" Command="{Binding AddMatchCommand}">
+            <Button Grid.Column="0" Content="Ok"  Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Right" Command="{Binding AddMatchCommand}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource Converter}">
                         <Binding Path="Text" ElementName="cbStadiumMatch"/>
@@ -75,8 +71,8 @@
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>
-            <Button Content="Usuń mecz"  />
-            <ScrollViewer>
-                <DataGrid IsReadOnly="True" ItemsSource="{Binding match}" SelectedItem="{Binding SelectedMatch}"/>
-            </ScrollViewer>-->
+            <Button Grid.Column="1" Content="Anuluj" Margin="10,5" Padding="20,2" Height="24" HorizontalAlignment="Left" Click="Button_Cancel"></Button>
 
+        </Grid>
+    </DockPanel>
+</Window>
