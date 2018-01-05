@@ -152,6 +152,15 @@
                                         </MultiBinding>
                                     </Button.CommandParameter>
                                 </Button>
+                                <Button Content="Edit ticket" Command="{Binding EditTicketCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource Converter}">
+                                            <Binding Path="Text" ElementName="cbTicketMatch"/>
+                                            <Binding Path="Text" ElementName="tbPESELTicket"/>
+                                            <Binding Path="SelectedTicket" />
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
                                 <Button Content="Remove ticket" Command="{Binding RemoveTicketCommand}" CommandParameter="{Binding SelectedTicket}"/>
                                 <DataGrid IsReadOnly="True" ItemsSource="{Binding ticket}" SelectedItem="{Binding SelectedTicket}"/>
                             </StackPanel>
@@ -187,6 +196,17 @@
                                             <Binding Path="Text" ElementName="tbReffereLastName"/>
                                             <Binding Path="Text" ElementName="tbReffereSalaryName"/>
                                             <Binding Path="Text" ElementName="cbRefereeRole"/>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button Content="Edit referee" Command="{Binding EditRefereeCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource Converter}">
+                                            <Binding Path="Text" ElementName="tbReffereFirstName"/>
+                                            <Binding Path="Text" ElementName="tbReffereLastName"/>
+                                            <Binding Path="Text" ElementName="tbReffereSalaryName"/>
+                                            <Binding Path="Text" ElementName="cbRefereeRole"/>
+                                            <Binding Path="SelectedReffere"/>
                                         </MultiBinding>
                                     </Button.CommandParameter>
                                 </Button>

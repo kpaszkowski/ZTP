@@ -258,6 +258,47 @@ namespace ZTP.ViewModel
             UpdatRefereeGrid();
         }
 
+        private void EditReferee(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+            var values = (object[])parameter;
+            double n;
+            double salary = 0;
+            bool isNumeric = double.TryParse((string)values[2].ToString(), out n);
+            if (isNumeric)
+            {
+                salary = double.Parse((string)values[2].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            RefereeView currentReferee = (RefereeView)values[4];
+            Referee referee = reffere.Where(x => x.ID == currentReferee.ID).FirstOrDefault();
+            if (values[3] != null && values[3].ToString() == referee.Role)
+            {
+                string role = (string)values[3].ToString();
+            }
+            else if (values[3]!=null)
+            {
+                ShowInfoWindow("Nie można zmienić typu sędziego");
+                return;
+            }
+            foreach (Referee item in reffere.Where(x=>x.ID== referee.ID))
+            {
+                item.FirstName = values[0].ToString();
+                item.LastName = values[1].ToString();
+                item.Salary = salary;
+            }
+            UpdatRefereeGrid();
+        }
+
         private void AddReffere(object parameter)
         {
             if (!ValidateParams(parameter))
@@ -339,11 +380,6 @@ namespace ZTP.ViewModel
             SetNextReferee(r);
             reffere.Add(r);
             UpdatRefereeGrid();
-        }
-
-        private void EditReferee(object obj)
-        {
-            throw new NotImplementedException();
         }
 
         private void SetNextReferee(Referee referee)
@@ -632,9 +668,24 @@ namespace ZTP.ViewModel
 
         }
 
-        private void EditTicket(object obj)
+        private void EditTicket(object parameter)
         {
-            throw new NotImplementedException();
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+            var values = (object[])parameter;
+            Ticket currentTicket = (Ticket)values[2];
+            long newMatchID = Int32.Parse(values[0].ToString());
+            match.Where(x => x.ID == currentTicket.MatchID).FirstOrDefault().Detach(currentTicket);
+            foreach (Ticket item in ticket.Where(x=>x.ID==currentTicket.ID))
+            {
+                item.MatchID = newMatchID;
+                item.PESEL = values[1].ToString();
+                item.Date = match.Where(x => x.ID == item.MatchID).Select(x => x.Date).FirstOrDefault();
+                match.Where(x => x.ID == newMatchID).FirstOrDefault().Attach(item);
+            }
         }
 
         #endregion
