@@ -69,14 +69,24 @@
     </Compile>
     <Compile Include="Interfaces\IObservable.cs" />
     <Compile Include="Interfaces\IObserver.cs" />
+    <Compile Include="ViewModel\Assistant.cs" />
+    <Compile Include="ViewModel\AssistantCreator.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\Club.cs" />
+    <Compile Include="ViewModel\Coach.cs" />
+    <Compile Include="ViewModel\CoachCreator.cs" />
     <Compile Include="ViewModel\HistoricalRecords.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Match.cs" />
+    <Compile Include="ViewModel\Physiotherapist.cs" />
+    <Compile Include="ViewModel\PhysiotherapistCreator.cs" />
     <Compile Include="ViewModel\Referee.cs" />
     <Compile Include="ViewModel\RefereeView.cs" />
+    <Compile Include="ViewModel\Scout.cs" />
+    <Compile Include="ViewModel\ScoutCreator.cs" />
     <Compile Include="ViewModel\Stadium.cs" />
+    <Compile Include="ViewModel\StaffCreator.cs" />
+    <Compile Include="ViewModel\StaffMember.cs" />
     <Compile Include="ViewModel\Ticket.cs" />
     <Page Include="InfoWindow.xaml">
       <SubType>Designer</SubType>
