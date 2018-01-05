@@ -178,16 +178,25 @@ namespace ZTP.ViewModel
 
         public RelayCommand AddStadiumCommand { get; set; }
         public RelayCommand RemoveStadiumCommand { get; set; }
+        public RelayCommand EditStadiumCommand { get; set; }
+
         public RelayCommand AddMatchCommand { get; set; }
         public RelayCommand RemoveMatchCommand { get; set; }
+        public RelayCommand EditMatchCommand { get; set; }
+
         public RelayCommand AddTicketCommand { get; set; }
         public RelayCommand RemoveTicketCommand { get; set; }
+        public RelayCommand EditTicketCommand { get; set; }
+
         public RelayCommand AddClubCommand { get; set; }
         public RelayCommand RemoveClubCommand { get; set; }
+        public RelayCommand EditClubCommand { get; set; }
+
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
-        public RelayCommand EditMatchCommand { get; set; }
         public RelayCommand ReleaseRefereesCommand { get; set; }
+        public RelayCommand EditRefereeCommand { get; set; }
+
         public RelayCommand SaveData { get; set; }
         public RelayCommand LoadData { get; set; }
 
@@ -202,16 +211,25 @@ namespace ZTP.ViewModel
         {
             AddStadiumCommand = new RelayCommand(AddStadium);
             RemoveStadiumCommand = new RelayCommand(RemoveStadium);
+            EditStadiumCommand = new RelayCommand(EditStadium);
+
             AddClubCommand = new RelayCommand(AddClub);
             RemoveClubCommand = new RelayCommand(RemoveClub);
+            EditClubCommand = new RelayCommand(EditClub);
+
             AddTicketCommand = new RelayCommand(AddTicket);
             RemoveTicketCommand = new RelayCommand(RemoveTicket);
+            EditTicketCommand = new RelayCommand(EditTicket);
+
             AddMatchCommand = new RelayCommand(AddMatch);
             RemoveMatchCommand = new RelayCommand(RemoveMatch);
+            EditMatchCommand = new RelayCommand(EditMatch);
+
             AddReffereCommand = new RelayCommand(AddReffere);
             RemoveReffereCommand = new RelayCommand(RemoveReffere);
-            EditMatchCommand = new RelayCommand(EditMatch);
             ReleaseRefereesCommand = new RelayCommand(ReleaseReferees);
+            EditRefereeCommand = new RelayCommand(EditReferee);
+
             SaveData = new RelayCommand(Save);
             LoadData = new RelayCommand(Load);
 
@@ -321,6 +339,11 @@ namespace ZTP.ViewModel
             SetNextReferee(r);
             reffere.Add(r);
             UpdatRefereeGrid();
+        }
+
+        private void EditReferee(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         private void SetNextReferee(Referee referee)
@@ -461,8 +484,18 @@ namespace ZTP.ViewModel
             var values = (object[])parameter;
             var selectedMatch = (Match)values[0];
             var newDate = (Nullable<DateTime>)values[1];
+            Stadium stadium = (Stadium)values[2];
+            Club hostClub = (Club)values[3];
+            Club guestClub = (Club)values[4];
+            int hostGoals = Int32.Parse((string)values[5].ToString());
+            int guestGoals = Int32.Parse((string)values[6].ToString());
             foreach (Match item in match.Where(x=>x.ID== selectedMatch.ID))
             {
+                item.Stadium_Name = stadium.Name;
+                item.Host_Name = hostClub.Name;
+                item.Guest_Name = guestClub.Name;
+                item.HostGoals = hostGoals;
+                item.GuestGoals = guestGoals;
                 item.Date = newDate;
             }
             selectedMatch.Notify(newDate);
@@ -599,6 +632,11 @@ namespace ZTP.ViewModel
 
         }
 
+        private void EditTicket(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Club
@@ -627,9 +665,26 @@ namespace ZTP.ViewModel
                 ID=Helpers.FindMaxValue(club,x=>x.ID)+1,
                 Name=values[0].ToString(),
                 StadiumID=stadium.ID,
-                Stadium_Name=stadium.Name
             };
             club.Add(c);
+
+        }
+
+        private void EditClub(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+            var values = (object[])parameter;
+            Stadium stadium = (Stadium)values[1];
+            Club currentClub = (Club)values[2];
+            foreach (Club item in club.Where(x=>x.ID==currentClub.ID))
+            {
+                item.Name = values[0].ToString();
+                item.StadiumID = stadium.ID;
+            }
 
         }
 
@@ -664,6 +719,23 @@ namespace ZTP.ViewModel
                 Country = values[2].ToString()
             };
             stadium.Add(s);
+        }
+
+        private void EditStadium(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+            var values = (object[])parameter;
+            Stadium currentStadium = (Stadium)values[3];
+            foreach (Stadium item in stadium.Where(x => x.ID == currentStadium.ID))
+            {
+                item.Name = values[0].ToString();
+                item.City = values[1].ToString();
+                item.Country = values[2].ToString();
+            }
         }
 
         #endregion

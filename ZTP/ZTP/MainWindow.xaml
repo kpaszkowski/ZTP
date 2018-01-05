@@ -40,6 +40,16 @@
                                         </MultiBinding>
                                     </Button.CommandParameter>
                                 </Button>
+                                <Button Content="Edit stadium" Command="{Binding EditStadiumCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource Converter}">
+                                            <Binding Path="Text" ElementName="tbName"/>
+                                            <Binding Path="Text" ElementName="tbCity"/>
+                                            <Binding Path="Text" ElementName="tbCountry"/>
+                                            <Binding Path="SelectedStadium"/>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
                                 <Button Content="Remove stadium" Command="{Binding RemoveStadiumCommand}" CommandParameter="{Binding SelectedStadium}"/>
                                 <Label>Stadium Name</Label>
                                 <TextBox Name="tbName" Text="Name"/>
@@ -55,7 +65,16 @@
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{StaticResource Converter}">
                                             <Binding Path="Text" ElementName="tbNameClub"/>
-                                            <Binding Path="Text" ElementName="selectedstadium"/>
+                                            <Binding Path="SelectedStadium"/>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
+                                </Button>
+                                <Button Content="Edit club" Command="{Binding EditClubCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource Converter}">
+                                            <Binding Path="Text" ElementName="tbNameClub"/>
+                                            <Binding Path="SelectedStadium"/>
+                                            <Binding Path="SelectedClub"/>
                                         </MultiBinding>
                                     </Button.CommandParameter>
                                 </Button>
@@ -103,13 +122,16 @@
                                     </Button.CommandParameter>
                                 </Button>
                                 <Button Content="Remove match" Command="{Binding RemoveMatchCommand}" CommandParameter="{Binding SelectedMatch}"/>
-                                <Label>Change date</Label>
-                                <DatePicker x:Name="dpEditDateMatch" SelectedDateFormat="Long" SelectedDate="{Binding MyDateTimeProperty2, Mode=TwoWay}" ></DatePicker>
                                 <Button Content="Edit match" Command="{Binding EditMatchCommand}">
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{StaticResource Converter}">
                                             <Binding Path="SelectedMatch"/>
-                                            <Binding Path="SelectedDate" ElementName="dpEditDateMatch"/>
+                                            <Binding Path="SelectedDate" ElementName="dpDateMatch"/>
+                                            <Binding Path="SelectedStadium"/>
+                                            <Binding Path="SelectedClub"/>
+                                            <Binding Path="SelectedClub2"/>
+                                            <Binding Path="Text" ElementName="tbHostGoals"/>
+                                            <Binding Path="Text" ElementName="tbGuestGoals"/>
                                         </MultiBinding>
                                     </Button.CommandParameter>
                                 </Button>

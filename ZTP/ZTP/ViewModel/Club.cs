@@ -37,23 +37,6 @@ namespace ZTP.ViewModel
             }
         }
 
-        string _Stadium;
-        public string Stadium_Name
-        {
-            get
-            {
-                return _Stadium;
-            }
-            set
-            {
-                if (_Stadium != value)
-                {
-                    _Stadium = value;
-                    RaisePropertyChanged("Stadium");
-                }
-            }
-        }
-
         long _StadiumID;
         public long StadiumID
         {
