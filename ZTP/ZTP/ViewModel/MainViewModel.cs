@@ -428,6 +428,7 @@ namespace ZTP.ViewModel
                 return;
             }
             var values = (Match)parameter;
+            values.IsRefereeRelease = true;
             foreach (var item in reffere.Where(x=>x.MatchID==values.ID))
             {
                 item.IsBusy = false;

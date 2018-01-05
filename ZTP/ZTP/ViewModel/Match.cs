@@ -184,6 +184,22 @@ namespace ZTP.ViewModel
                 }
             }
         }
+        bool _IsRefereeRelease;
+        public bool IsRefereeRelease
+        {
+            get
+            {
+                return _IsRefereeRelease;
+            }
+            set
+            {
+                if (_IsRefereeRelease != value)
+                {
+                    _IsRefereeRelease = value;
+                    RaisePropertyChanged("IsRefereeRelease");
+                }
+            }
+        }
         #endregion
 
         List<Ticket> ticketList = new List<Ticket>();
