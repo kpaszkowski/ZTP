@@ -42,19 +42,19 @@ namespace ZTP.ViewModel
             }
         }
 
-        string _Stadium;
-        public string Stadium_Name
+        long _StadiumID;
+        public long StadiumID
         {
             get
             {
-                return _Stadium;
+                return _StadiumID;
             }
             set
             {
-                if (_Stadium != value)
+                if (_StadiumID != value)
                 {
-                    _Stadium = value;
-                    RaisePropertyChanged("Stadium");
+                    _StadiumID = value;
+                    RaisePropertyChanged("StadiumID");
                 }
             }
         }
