@@ -27,6 +27,7 @@ namespace ZTP.ViewModel
 
         public ObservableCollection<Stadium> stadium { get; set; }
         public ObservableCollection<Club> club { get; set; }
+        public ObservableCollection<Player> player { get; set; }//
         public ObservableCollection<Ticket> ticket { get; set; }
         public ObservableCollection<Match> match { get; set; }
         public ObservableCollection<RefereeView> refereeView { get; set; }
@@ -192,6 +193,10 @@ namespace ZTP.ViewModel
         public RelayCommand RemoveClubCommand { get; set; }
         public RelayCommand EditClubCommand { get; set; }
 
+        public RelayCommand AddPlayerCommand { get; set; }//
+        public RelayCommand RemovePlayerCommand { get; set; }
+        public RelayCommand EditPlayerCommand { get; set; }
+
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
         public RelayCommand ReleaseRefereesCommand { get; set; }
@@ -217,6 +222,10 @@ namespace ZTP.ViewModel
             RemoveClubCommand = new RelayCommand(RemoveClub);
             EditClubCommand = new RelayCommand(EditClub);
 
+            AddPlayerCommand = new RelayCommand(AddPlayer);//
+            RemovePlayerCommand = new RelayCommand(RemovePlayer);
+            EditPlayerCommand = new RelayCommand(EditPlayer);
+
             AddTicketCommand = new RelayCommand(AddTicket);
             RemoveTicketCommand = new RelayCommand(RemoveTicket);
             EditTicketCommand = new RelayCommand(EditTicket);
@@ -235,6 +244,7 @@ namespace ZTP.ViewModel
 
             stadium = new ObservableCollection<Stadium>();
             club = new ObservableCollection<Club>();
+            player = new ObservableCollection<Player>();//
             match = new ObservableCollection<Match>();
             ticket = new ObservableCollection<Ticket>();
             refereeView = new ObservableCollection<RefereeView>();
@@ -741,6 +751,114 @@ namespace ZTP.ViewModel
 
         #endregion
 
+        #region Player
+
+        private void RemovePlayer(object parameter)
+        {
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano gracza");
+                return;
+            }
+            var values = (Player)parameter;
+            player.Remove(values);
+        }
+
+        private void AddPlayer(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            var values = (object[])parameter;
+
+            int iNumber;
+            int age = 0;
+            bool isNumeric1 = int.TryParse((string)values[2].ToString(), out iNumber);
+            if (isNumeric1)
+            {
+                age = int.Parse((string)values[2].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            double dNumber;
+            double salary = 0;
+            bool isNumeric2 = double.TryParse((string)values[3].ToString(), out dNumber);
+            if (isNumeric2)
+            {
+                salary = double.Parse((string)values[3].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            Player p = new Player
+            {
+                ID = Helpers.FindMaxValue(player, x => x.ID) + 1,
+                FirstName = values[0].ToString(),
+                LastName = values[1].ToString(),
+                Age = age,
+                Salary = salary,
+            };
+            player.Add(p);
+        }
+
+        private void EditPlayer(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            var values = (object[])parameter;
+
+            int iNumber;
+            int age = 0;
+            bool isNumeric1 = int.TryParse((string)values[2].ToString(), out iNumber);
+            if (isNumeric1)
+            {
+                age = int.Parse((string)values[2].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            double dNumber;
+            double salary = 0;
+            bool isNumeric2 = double.TryParse((string)values[3].ToString(), out dNumber);
+            if (isNumeric2)
+            {
+                salary = double.Parse((string)values[3].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            Player currentPlayer = (Player)values[4];
+            foreach (Player item in player.Where(x => x.ID == currentPlayer.ID))
+            {
+                item.FirstName = values[0].ToString();
+                item.LastName = values[1].ToString();
+                item.Age = age;
+                item.Salary = salary;
+            }
+        }
+
+        #endregion
+
         #region Stadium
 
         private void RemoveStadium(object parameter)
@@ -799,6 +917,7 @@ namespace ZTP.ViewModel
         {
             SaveStadium();
             SaveClub();
+            SavePlayer();//
             SaveMatch();
             SaveTicket();
             SaveReferee();
@@ -836,6 +955,14 @@ namespace ZTP.ViewModel
             System.IO.File.WriteAllText(path, json);
         }
 
+        private void SavePlayer()//
+        {
+            string json = JsonConvert.SerializeObject(player);
+            string fileName = "player.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
         private void SaveStadium()
         {
             string json = JsonConvert.SerializeObject(stadium);
@@ -852,6 +979,7 @@ namespace ZTP.ViewModel
         {
             LoadStadium();
             LoadClub();
+            LoadPlayer();//
             LoadMatch();
             LoadTicket();
             LoadReferee();
@@ -916,6 +1044,21 @@ namespace ZTP.ViewModel
                 foreach (var item in result)
                 {
                     club.Add(item);
+                }
+            }
+        }
+
+        private void LoadPlayer()//
+        {
+            string fileName = "player.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<Player>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    player.Add(item);
                 }
             }
         }

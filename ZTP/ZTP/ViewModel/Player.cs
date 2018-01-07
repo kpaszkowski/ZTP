@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace ZTP.ViewModel
 {
-    class Player : ClubComponent, INotifyPropertyChanged
+    public class Player : ClubComponent, INotifyPropertyChanged
     {
 
         public long ID
@@ -95,12 +95,12 @@ namespace ZTP.ViewModel
 
         List<Record> records = new List<Record>();
 
-        public void AddRecord (Record record)
+        void addRecord (Record record)
         {
             records.Add(record);
         }
 
-        public void RemoveRecord(Record record)
+        void removeRecord(Record record)
         {
             records.Remove(record);
         }
