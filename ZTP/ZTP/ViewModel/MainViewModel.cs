@@ -22,7 +22,7 @@ namespace ZTP.ViewModel
         Observer,
     }
 
-    enum RecordType
+    enum RecordName
     {
         Most_Appearance,
         Best_Scorer,
@@ -876,7 +876,11 @@ namespace ZTP.ViewModel
         #endregion
 
         #region Record
-
+        /*
+         * 0 - name(poprzednio type) rekordu
+         * 1 - val
+         * 2 - id playera do ktorego jest przypisany rekord (OwnerID)
+         */
         private void RemoveRecord(object parameter)
         {
             if (!ValidateParamsAsObject(parameter))
@@ -886,6 +890,7 @@ namespace ZTP.ViewModel
             }
             var values = (Record)parameter;
             record.Remove(values);
+            player.Where(x => x.ID == values.OwnerID).FirstOrDefault().removeRecord(values);
         }
 
         private void AddRecord(object parameter)
@@ -897,24 +902,30 @@ namespace ZTP.ViewModel
             }
 
             var values = (object[])parameter;
-            string role = (string)values[1].ToString();
+
+            string name = (string)values[0].ToString();
+
             int iNumber;
-            int val = 0;
-            bool isNumeric1 = int.TryParse((string)values[2].ToString(), out iNumber);
+            int val = 0;         
+            bool isNumeric1 = int.TryParse((string)values[1].ToString(), out iNumber);
             if (isNumeric1)
             {
-                val = int.Parse((string)values[2].ToString());
+                val = int.Parse((string)values[1].ToString());
             }
+
+            int ownerID = Int32.Parse(values[2].ToString());
+
             Record r = null;
-            switch (role)
+            switch (name)
             {
                 case "Most_Apearance":
                     {
                         r = new Record
                         {
                             ID = Helpers.FindMaxValue(record, x => x.ID) + 1,
-                            Type = role,
-                            Val = val
+                            Name = name,
+                            Val = val,
+                            OwnerID = ownerID
                         };
                         break;
                     }
@@ -923,14 +934,16 @@ namespace ZTP.ViewModel
                         r = new Record
                         {
                             ID = Helpers.FindMaxValue(record, x => x.ID) + 1,
-                            Type = role,
-                            Val = val
+                            Name = name,
+                            Val = val,
+                            OwnerID = ownerID
                         };
                         break;
                     }
             }
 
             record.Add(r);
+            player.Where(x => x.ID == ownerID).FirstOrDefault().addRecord(r);
         }
 
         private void EditRecord(object parameter)
@@ -940,7 +953,7 @@ namespace ZTP.ViewModel
                 ShowInfoWindow("Wypełnij pola poprawnie");
                 return;
             }
-
+            /*
             var values = (object[])parameter;
 
             int iNumber;
@@ -956,13 +969,13 @@ namespace ZTP.ViewModel
                 return;
             }
             Record currentRecord = (Record)values[3];
-            if (values[1] != null && values[1].ToString() == currentRecord.Type)
+            if (values[1] != null && values[1].ToString() == currentRecord.Name)
             {
                 string role = (string)values[1].ToString();
             }
             else if (values[3] != null)
             {
-                ShowInfoWindow("Nie można zmienić typu");
+                ShowInfoWindow("Nie można zmienić nazwy");
                 return;
             }
 
@@ -971,6 +984,34 @@ namespace ZTP.ViewModel
             {
                 item.Val = int.Parse((string)values[2].ToString());
             }
+            */
+            ///
+            var values = (object[])parameter;
+
+            int iNumber;
+            int val = 0;
+            bool isNumeric1 = int.TryParse((string)values[1].ToString(), out iNumber);
+            if (isNumeric1)
+            {
+                val = int.Parse((string)values[1].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            Record currentRecord = (Record)values[3];
+            long newOwnerID = Int32.Parse(values[2].ToString());
+            player.Where(x => x.ID == currentRecord.OwnerID).FirstOrDefault().removeRecord(currentRecord);
+            foreach (Record item in record.Where(x => x.ID == currentRecord.ID))
+            {
+                item.Name = values[0].ToString();
+                item.Val = val;
+                item.OwnerID = newOwnerID;
+                player.Where(x => x.ID == newOwnerID).FirstOrDefault().addRecord(item);
+            }
+
         }
 
         #endregion

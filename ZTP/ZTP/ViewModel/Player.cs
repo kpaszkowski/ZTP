@@ -95,12 +95,12 @@ namespace ZTP.ViewModel
 
         List<Record> records = new List<Record>();
 
-         void addRecord (Record record)
+        public void addRecord (Record record)
         {
             records.Add(record);
         }
 
-         void removeRecord(Record record)
+        public void removeRecord(Record record)
         {
             records.Remove(record);
         }

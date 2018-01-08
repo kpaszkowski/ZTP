@@ -26,19 +26,36 @@ namespace ZTP.ViewModel
             }
         }
 
-        private string _type;
-        public string Type
+        long _OwnerID;
+        public long OwnerID
         {
             get
             {
-                return _type;
+                return _OwnerID;
             }
             set
             {
-                if (_type != value)
+                if (_OwnerID != value)
                 {
-                    _type = value;
-                    RaisePropertyChanged("RecordType");
+                    _OwnerID = value;
+                    RaisePropertyChanged("OwnerID");
+                }
+            }
+        }
+
+        //private string _type;
+        public string Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                if (_Name != value)
+                {
+                    _Name = value;
+                    RaisePropertyChanged("RecordName");
                 }
             }
         }
