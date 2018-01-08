@@ -1109,7 +1109,7 @@ namespace ZTP.ViewModel
 
         private void SaveStaff()//
         {
-            string json = JsonConvert.SerializeObject(player);
+            string json = JsonConvert.SerializeObject(staff);
             string fileName = "staff.txt";
             string path = Path.Combine(Environment.CurrentDirectory, fileName);
             System.IO.File.WriteAllText(path, json);
