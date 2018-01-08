@@ -93,6 +93,15 @@ namespace ZTP.ViewModel
             records.Remove(record);
         }
 
+        public void Display(string s)
+        {
+            sClubDisplay = s + _Name + Environment.NewLine;
+            foreach (ClubComponent cc in players)
+            {
+                cc.Display(sClubDisplay);
+            }
+            RaisePropertyChanged("Display");
+        }
 
 
         void RaisePropertyChanged(string prop)

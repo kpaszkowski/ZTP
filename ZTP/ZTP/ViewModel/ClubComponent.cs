@@ -10,5 +10,7 @@ namespace ZTP.ViewModel
     {
         protected long _ID;
         protected string _Name;
+        public string sClubDisplay;
+        public void Display(string s) { }
     }
 }

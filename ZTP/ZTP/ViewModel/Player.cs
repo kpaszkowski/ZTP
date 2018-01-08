@@ -105,6 +105,16 @@ namespace ZTP.ViewModel
             records.Remove(record);
         }
 
+        public void Display(string s)
+        {
+            sClubDisplay = s + "-" + _firstName + " " + _lastName + Environment.NewLine;
+            foreach (ClubComponent cc in records)
+            {
+                cc.Display(sClubDisplay);
+            }
+            RaisePropertyChanged("Display");
+        }
+
         void RaisePropertyChanged(string prop)
         {
             if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }

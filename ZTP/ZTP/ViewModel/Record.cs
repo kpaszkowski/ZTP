@@ -77,6 +77,12 @@ namespace ZTP.ViewModel
             }
         }
 
+        public void Display(string s)
+        {
+            sClubDisplay = s + " >" + _Name + " - " + _val + Environment.NewLine;
+            RaisePropertyChanged("Display");
+        }
+
         void RaisePropertyChanged(string prop)
         {
             if (PropertyChanged != null) { PropertyChanged(this, new PropertyChangedEventArgs(prop)); }

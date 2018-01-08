@@ -265,6 +265,8 @@ namespace ZTP.ViewModel
         public RelayCommand RemoveRecordCommand { get; set; }
         public RelayCommand EditRecordCommand { get; set; }
 
+        public RelayCommand DisplayClubCommand { get; set; }
+
         public RelayCommand SaveData { get; set; }
         public RelayCommand LoadData { get; set; }
 
@@ -305,6 +307,8 @@ namespace ZTP.ViewModel
             AddRecordCommand = new RelayCommand(AddRecord);
             RemoveRecordCommand = new RelayCommand(RemoveRecord);
             EditRecordCommand = new RelayCommand(EditRecord);
+
+            DisplayClubCommand = new RelayCommand(DisplayClub);
 
             SaveData = new RelayCommand(Save);
             LoadData = new RelayCommand(Load);
@@ -1017,6 +1021,18 @@ namespace ZTP.ViewModel
         #endregion
 
         #region Club
+
+        private void DisplayClub(object parameter)
+        {
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano klubu");
+                return;
+            }
+            var values = (object[])parameter;
+            Club club = (Club)values[0];
+            club.Display("");
+        }
 
         private void RemoveClub(object parameter)
         {
