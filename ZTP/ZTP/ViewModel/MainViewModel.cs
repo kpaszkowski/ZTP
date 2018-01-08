@@ -36,6 +36,7 @@ namespace ZTP.ViewModel
         public ObservableCollection<Club> club { get; set; }
         public ObservableCollection<Player> player { get; set; }//
         public ObservableCollection<StaffMember> staff { get; set; }//
+        public ObservableCollection<HistoricalRecords> historicalRecords { get; set; }//
         public ObservableCollection<Ticket> ticket { get; set; }
         public ObservableCollection<Match> match { get; set; }
         public ObservableCollection<RefereeView> refereeView { get; set; }
@@ -209,6 +210,10 @@ namespace ZTP.ViewModel
         public RelayCommand RemoveStaffCommand { get; set; }
         public RelayCommand EditStaffCommand { get; set; }
 
+        public RelayCommand AddHistoricalRecordCommand { get; set; }//
+        public RelayCommand RemoveHistoricalRecordCommand { get; set; }
+        public RelayCommand EditHistoricalRecordCommand { get; set; }
+
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
         public RelayCommand ReleaseRefereesCommand { get; set; }
@@ -255,6 +260,9 @@ namespace ZTP.ViewModel
             RemoveStaffCommand = new RelayCommand(RemoveStaff);
             EditStaffCommand = new RelayCommand(EditStaff);
 
+            AddHistoricalRecordCommand = new RelayCommand(AddHistoricalRecords);//
+            RemoveHistoricalRecordCommand = new RelayCommand(RemoveHistoricalRecords);
+
             SaveData = new RelayCommand(Save);
             LoadData = new RelayCommand(Load);
 
@@ -264,6 +272,7 @@ namespace ZTP.ViewModel
             match = new ObservableCollection<Match>();
             ticket = new ObservableCollection<Ticket>();
             refereeView = new ObservableCollection<RefereeView>();
+            staff = new ObservableCollection<StaffMember>();
             reffere = new List<Referee>();
             
         }
@@ -1002,6 +1011,84 @@ namespace ZTP.ViewModel
 
         #endregion
 
+        #region HistoricalRecords
+
+
+        private void RemoveHistoricalRecords (object parameter)
+        {
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano rekordu");
+                return;
+            }
+            var values = (HistoricalRecords)parameter;
+            historicalRecords.Remove(values);
+        }
+
+        private void AddHistoricalRecords(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            var values = (object[])parameter;
+            // 0-nazwa zawodnika strzelca 1- nazwa klubu 2- nazwa zawodnika wystepy
+            //3- gole 4-ilosc wygranych klubu 5-ilosc wystepow
+            int iNumber;
+            int goals = 0;
+            bool isNumeric1 = int.TryParse((string)values[3].ToString(), out iNumber);
+            if (isNumeric1)
+            {
+                goals = int.Parse((string)values[3].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            int iNumber1;
+            int wins = 0;
+            bool isNumeric2 = int.TryParse((string)values[4].ToString(), out iNumber1);
+            if (isNumeric2)
+            {
+                wins = int.Parse((string)values[4].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            int iNumber2;
+            int appearances = 0;
+            bool isNumeric3 = int.TryParse((string)values[5].ToString(), out iNumber2);
+            if (isNumeric3)
+            {
+                appearances = int.Parse((string)values[5].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            HistoricalRecords ourHistoricalRecords = null;
+            ourHistoricalRecords.getInstance();
+
+            ourHistoricalRecords.setMostAppearancesAmount(appearances);
+            ourHistoricalRecords.setBestScorerGoals(goals);
+            ourHistoricalRecords.setMostWinsAmount(wins);
+            ourHistoricalRecords.setBestScorerName(values[0].ToString());
+            ourHistoricalRecords.setMostWinsTeam(values[1].ToString());
+            ourHistoricalRecords.setMostAppearancesName(values[2].ToString());
+
+        }
+
+        #endregion
+
         #region Stadium
 
         private void RemoveStadium(object parameter)
@@ -1065,6 +1152,7 @@ namespace ZTP.ViewModel
             SaveTicket();
             SaveReferee();
             SaveStaff();
+            SaveRecords();
         }
 
         private void SaveReferee()
@@ -1115,6 +1203,14 @@ namespace ZTP.ViewModel
             System.IO.File.WriteAllText(path, json);
         }
 
+        private void SaveRecords()//
+        {
+            string json = JsonConvert.SerializeObject(historicalRecords);
+            string fileName = "records.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
         private void SaveStadium()
         {
             string json = JsonConvert.SerializeObject(stadium);
@@ -1136,6 +1232,7 @@ namespace ZTP.ViewModel
             LoadTicket();
             LoadReferee();
             LoadStaff();
+            LoadRecords();
         }
 
         private void LoadReferee()
@@ -1227,6 +1324,21 @@ namespace ZTP.ViewModel
                 foreach (var item in result)
                 {
                     staff.Add(item);
+                }
+            }
+        }
+
+        private void LoadRecords()//
+        {
+            string fileName = "records.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<HistoricalRecords>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    historicalRecords.Add(item);
                 }
             }
         }

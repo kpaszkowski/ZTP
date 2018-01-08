@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ZTP.ViewModel
 {
-    class HistoricalRecords
+    public class HistoricalRecords : ClubComponent, INotifyPropertyChanged
     {
         private HistoricalRecords instance;
+
+        private HistoricalRecords() { }
 
         public HistoricalRecords getInstance()
         {
@@ -37,6 +40,9 @@ namespace ZTP.ViewModel
         public void setMostWinsTeam(String newTeam) { mostWinsTeam = newTeam; }
 
         private int mostWinsAmount;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public int getMostWinsAmount() { return mostWinsAmount; }
         public void setMostWinsAmount(int newAmount) { mostWinsAmount = newAmount; }
     }
