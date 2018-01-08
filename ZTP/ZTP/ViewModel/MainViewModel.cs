@@ -21,6 +21,13 @@ namespace ZTP.ViewModel
         Linear,
         Observer,
     }
+    enum StaffMemberType
+    {
+        Coach,
+        Assistant,
+        Scout,
+        Physiotherapist
+    }
     public class MainViewModel : BaseViewModel
     {
         #region Fields
@@ -28,6 +35,7 @@ namespace ZTP.ViewModel
         public ObservableCollection<Stadium> stadium { get; set; }
         public ObservableCollection<Club> club { get; set; }
         public ObservableCollection<Player> player { get; set; }//
+        public ObservableCollection<StaffMember> staff { get; set; }//
         public ObservableCollection<Ticket> ticket { get; set; }
         public ObservableCollection<Match> match { get; set; }
         public ObservableCollection<RefereeView> refereeView { get; set; }
@@ -197,6 +205,10 @@ namespace ZTP.ViewModel
         public RelayCommand RemovePlayerCommand { get; set; }
         public RelayCommand EditPlayerCommand { get; set; }
 
+        public RelayCommand AddStaffCommand { get; set; }//
+        public RelayCommand RemoveStaffCommand { get; set; }
+        public RelayCommand EditStaffCommand { get; set; }
+
         public RelayCommand AddReffereCommand { get; set; }
         public RelayCommand RemoveReffereCommand { get; set; }
         public RelayCommand ReleaseRefereesCommand { get; set; }
@@ -239,6 +251,10 @@ namespace ZTP.ViewModel
             ReleaseRefereesCommand = new RelayCommand(ReleaseReferees);
             EditRefereeCommand = new RelayCommand(EditReferee);
 
+            AddStaffCommand = new RelayCommand(AddStaff);//
+            RemoveStaffCommand = new RelayCommand(RemoveStaff);
+            EditStaffCommand = new RelayCommand(EditStaff);
+
             SaveData = new RelayCommand(Save);
             LoadData = new RelayCommand(Load);
 
@@ -249,7 +265,7 @@ namespace ZTP.ViewModel
             ticket = new ObservableCollection<Ticket>();
             refereeView = new ObservableCollection<RefereeView>();
             reffere = new List<Referee>();
-
+            
         }
 
         #region Referee
@@ -859,6 +875,133 @@ namespace ZTP.ViewModel
 
         #endregion
 
+        #region Staff
+
+       
+        private void RemoveStaff(object parameter)
+        {
+            if (!ValidateParamsAsObject(parameter))
+            {
+                ShowInfoWindow("Nie wybrano członka sztabu");
+                return;
+            }
+            var values = (StaffMember)parameter;
+            staff.Remove(values);
+        }
+
+        private void AddStaff(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            var values = (object[])parameter;
+
+            int iNumber;
+            int age = 0;
+            bool isNumeric1 = int.TryParse((string)values[1].ToString(), out iNumber);
+            if (isNumeric1)
+            {
+                age = int.Parse((string)values[1].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            double dNumber;
+            double salary = 0;
+            bool isNumeric2 = double.TryParse((string)values[2].ToString(), out dNumber);
+            if (isNumeric2)
+            {
+                salary = double.Parse((string)values[2].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+            StaffMemberType type = StaffMemberType.Physiotherapist;
+            StaffCreator creator;
+            switch (type)
+            {
+                case (StaffMemberType.Physiotherapist):
+                    creator = new PhysiotherapistCreator();
+                        break;
+                case (StaffMemberType.Coach):
+                    creator = new CoachCreator();
+                    break;
+                case (StaffMemberType.Assistant):
+                    creator = new AssistantCreator();
+                    break;
+                case (StaffMemberType.Scout):
+                    creator = new ScoutCreator();
+                    break;
+                default:
+                    creator = new ScoutCreator();
+                    break;
+
+            } 
+            StaffMember p = creator.staffMemberFactoryMethod();
+
+            p.Name=values[0].ToString();
+
+            p.Age=age;
+            p.Salary=salary;
+            
+            staff.Add(p);
+        }
+
+        private void EditStaff(object parameter)
+        {
+            if (!ValidateParams(parameter))
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            var values = (object[])parameter;
+
+            int iNumber;
+            int age = 0;
+            bool isNumeric1 = int.TryParse((string)values[1].ToString(), out iNumber);
+            if (isNumeric1)
+            {
+                age = int.Parse((string)values[1].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            double dNumber;
+            double salary = 0;
+            bool isNumeric2 = double.TryParse((string)values[2].ToString(), out dNumber);
+            if (isNumeric2)
+            {
+                salary = double.Parse((string)values[2].ToString());
+            }
+            else
+            {
+                ShowInfoWindow("Wypełnij pola poprawnie");
+                return;
+            }
+
+            StaffMember currentStaff = (StaffMember)values[3];
+            foreach (StaffMember item in staff.Where(x => x.ID == currentStaff.ID))
+            {
+                item.Name = values[0].ToString();
+                item.Age = age;
+                item.Salary = salary;
+            }
+        }
+
+        #endregion
+
         #region Stadium
 
         private void RemoveStadium(object parameter)
@@ -921,6 +1064,7 @@ namespace ZTP.ViewModel
             SaveMatch();
             SaveTicket();
             SaveReferee();
+            SaveStaff();
         }
 
         private void SaveReferee()
@@ -963,6 +1107,14 @@ namespace ZTP.ViewModel
             System.IO.File.WriteAllText(path, json);
         }
 
+        private void SaveStaff()//
+        {
+            string json = JsonConvert.SerializeObject(player);
+            string fileName = "staff.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            System.IO.File.WriteAllText(path, json);
+        }
+
         private void SaveStadium()
         {
             string json = JsonConvert.SerializeObject(stadium);
@@ -983,6 +1135,7 @@ namespace ZTP.ViewModel
             LoadMatch();
             LoadTicket();
             LoadReferee();
+            LoadStaff();
         }
 
         private void LoadReferee()
@@ -1059,6 +1212,21 @@ namespace ZTP.ViewModel
                 foreach (var item in result)
                 {
                     player.Add(item);
+                }
+            }
+        }
+
+        private void LoadStaff()//
+        {
+            string fileName = "staff.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
+            string json = System.IO.File.ReadAllText(path);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<StaffMember>>(json);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    staff.Add(item);
                 }
             }
         }
