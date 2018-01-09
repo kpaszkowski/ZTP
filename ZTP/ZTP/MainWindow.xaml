@@ -367,7 +367,7 @@
                                 <ComboBox Name="cbHRMMN" ItemsSource="{Binding player}" SelectedItem="{Binding SelectedPlayer1}" DisplayMemberPath="LastName"/>
                                 <Label>Most matches amount</Label>
                                 <TextBox Name="tbHRMMA" Text="0"/>
-                                <Button Content="Add Records" Command="{Binding AddStaffCommand}">
+                                <Button Content="Add Records" Command="{Binding AddHistoricalRecordCommand}">
                                     <Button.CommandParameter>
                                         <MultiBinding Converter="{StaticResource Converter}">
                                             <Binding Path="Text" ElementName="cbHRBSN"/>

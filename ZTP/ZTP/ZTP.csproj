@@ -79,6 +79,7 @@
     <Compile Include="ViewModel\Coach.cs" />
     <Compile Include="ViewModel\CoachCreator.cs" />
     <Compile Include="ViewModel\HistoricalRecords.cs" />
+    <Compile Include="ViewModel\HistoricalRecordView.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Match.cs" />
     <Compile Include="ViewModel\MatchPanel.cs" />

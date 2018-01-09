@@ -9,11 +9,11 @@ namespace ZTP.ViewModel
 {
     public class HistoricalRecords : ClubComponent, INotifyPropertyChanged
     {
-        private HistoricalRecords instance;
+        private static  HistoricalRecords instance;
 
         private HistoricalRecords() { }
 
-        public HistoricalRecords getInstance()
+        public static HistoricalRecords getInstance()
         {
             if (instance == null) instance = new HistoricalRecords();
             return instance;

@@ -43,7 +43,7 @@ namespace ZTP.ViewModel
         public ObservableCollection<Club> club { get; set; }
         public ObservableCollection<Player> player { get; set; }
         public ObservableCollection<StaffMember> staff { get; set; }
-        public ObservableCollection<HistoricalRecords> historicalRecords { get; set; }
+        public ObservableCollection<HistoricalRecordView> historicalRecords { get; set; }
         public ObservableCollection<Ticket> ticket { get; set; }
         public ObservableCollection<Match> match { get; set; }
         public ObservableCollection<Bracket> bracket { get; set; }
@@ -461,7 +461,7 @@ namespace ZTP.ViewModel
             EditStaffCommand = new RelayCommand(EditStaff);
 
             AddHistoricalRecordCommand = new RelayCommand(AddHistoricalRecords);//
-            RemoveHistoricalRecordCommand = new RelayCommand(RemoveHistoricalRecords);
+            //RemoveHistoricalRecordCommand = new RelayCommand(RemoveHistoricalRecords);
 
             SaveData = new RelayCommand(Save);
             LoadData = new RelayCommand(Load);
@@ -474,6 +474,8 @@ namespace ZTP.ViewModel
             refereeView = new ObservableCollection<RefereeView>();
             staff = new ObservableCollection<StaffMember>();
             reffere = new List<Referee>();
+            record = new ObservableCollection<Record>();
+            historicalRecords = new ObservableCollection<HistoricalRecordView>();
             
         }
 
@@ -1371,7 +1373,8 @@ namespace ZTP.ViewModel
             }
 
             Record currentRecord = (Record)values[3];
-            long newOwnerID = Int32.Parse(values[2].ToString());
+            Player currenttPlayer = (Player)values[2];
+            long newOwnerID = Int32.Parse(currenttPlayer.ID.ToString());
             player.Where(x => x.ID == currentRecord.OwnerID).FirstOrDefault().removeRecord(currentRecord);
             foreach (Record item in record.Where(x => x.ID == currentRecord.ID))
             {
@@ -1380,7 +1383,16 @@ namespace ZTP.ViewModel
                 item.OwnerID = newOwnerID;
                 player.Where(x => x.ID == newOwnerID).FirstOrDefault().addRecord(item);
             }
-
+            List<Record> tempList = new List<Record>();
+            foreach (Record item in record)
+            {
+                tempList.Add(item);
+            }
+            record.Clear();
+            foreach (Record item in tempList)
+            {
+                record.Add(item);
+            }
         }
 
         #endregion
@@ -1439,16 +1451,16 @@ namespace ZTP.ViewModel
         #region HistoricalRecords
 
 
-        private void RemoveHistoricalRecords (object parameter)
-        {
-            if (!ValidateParamsAsObject(parameter))
-            {
-                ShowInfoWindow("Nie wybrano rekordu");
-                return;
-            }
-            var values = (HistoricalRecords)parameter;
-            historicalRecords.Remove(values);
-        }
+        //private void RemoveHistoricalRecords (object parameter)
+        //{
+        //    if (!ValidateParamsAsObject(parameter))
+        //    {
+        //        ShowInfoWindow("Nie wybrano rekordu");
+        //        return;
+        //    }
+        //    var values = (HistoricalRecords)parameter;
+        //    historicalRecords.Remove(values);
+        //}
 
         private void AddHistoricalRecords(object parameter)
         {
@@ -1500,8 +1512,7 @@ namespace ZTP.ViewModel
                 return;
             }
 
-            HistoricalRecords ourHistoricalRecords = null;
-            ourHistoricalRecords.getInstance();
+            HistoricalRecords ourHistoricalRecords = HistoricalRecords.getInstance();
 
             ourHistoricalRecords.setMostAppearancesAmount(appearances);
             ourHistoricalRecords.setBestScorerGoals(goals);
@@ -1509,6 +1520,18 @@ namespace ZTP.ViewModel
             ourHistoricalRecords.setBestScorerName(values[0].ToString());
             ourHistoricalRecords.setMostWinsTeam(values[1].ToString());
             ourHistoricalRecords.setMostAppearancesName(values[2].ToString());
+
+            historicalRecords.Clear();
+            historicalRecords.Add(new HistoricalRecordView
+            {
+                BestScorerName = ourHistoricalRecords.getBestScorerName(),
+                BestScorerGoals = ourHistoricalRecords.getBestScorerGoals(),
+                MostAppearancesName = ourHistoricalRecords.getMostAppearancesName(),
+                MostAppearancesAmount = ourHistoricalRecords.getMostAppearancesAmount(),
+                MostWinsAmount = ourHistoricalRecords.getMostWinsAmount(),
+                MostWinsTeam = ourHistoricalRecords.getMostWinsTeam(),
+            });
+
 
         }
 
@@ -1710,7 +1733,7 @@ namespace ZTP.ViewModel
             string fileName = "records.txt";
             string path = Path.Combine(Environment.CurrentDirectory, fileName);
             string json = System.IO.File.ReadAllText(path);
-            var result = JsonConvert.DeserializeObject<ObservableCollection<HistoricalRecords>>(json);
+            var result = JsonConvert.DeserializeObject<ObservableCollection<HistoricalRecordView>>(json);
             if (result != null)
             {
                 foreach (var item in result)
