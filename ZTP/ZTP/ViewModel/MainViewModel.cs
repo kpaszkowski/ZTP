@@ -1191,6 +1191,7 @@ namespace ZTP.ViewModel
 
             double dNumber;
             double salary = 0;
+            string newRole = values[3].ToString();
             bool isNumeric2 = double.TryParse((string)values[2].ToString(), out dNumber);
             if (isNumeric2)
             {
@@ -1208,7 +1209,21 @@ namespace ZTP.ViewModel
                 item.Name = values[0].ToString();
                 item.Age = age;
                 item.Salary = salary;
+                item.Role = newRole;
             }
+
+            List<StaffMember> templist = new List<StaffMember>();
+
+            foreach (StaffMember item in staff)
+            {
+                templist.Add(item);
+            }
+            staff.Clear();
+            foreach (StaffMember item in templist)
+            {
+                staff.Add(item);
+            }
+
         }
 
         #endregion
